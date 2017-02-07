@@ -1,0 +1,8 @@
+{
+    "kafka": {
+        "zookeeper": {
+            "url": "localhost:2181"
+        },
+        "clientId": "mirrorserver"
+    }
+}

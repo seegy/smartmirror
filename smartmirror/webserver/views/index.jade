@@ -1,0 +1,25 @@
+extends layout
+
+block content
+  div.main
+    div.module#head
+      div.welcome.floatLeft
+        div.vcenter 
+          p Hallo, Sören.
+      div.floatLeft.time
+        .vcenter#clock
+    div.module.train
+      div.headTrain
+        img(src='/images/bullet_train.png')
+        span.fromStation
+          a Gießen Licher Str
+        span
+          a &#8594;
+        span.toStation
+          a Frankfurt(Main)West
+      div.firstTrain
+      div.secondTrain
+      div.thirdTrain
+    div.module
+    div.module
+    div.module
