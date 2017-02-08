@@ -8,7 +8,16 @@ var bodyParser = require('body-parser');
 var index = require('./routes/index');
 var users = require('./routes/users');
 
+//var sio = require('./routes/modules/sio');
+
+var io = require('socket.io')(3001);
 var kafka = require('./routes/modules/kafka');
+
+
+kafka.addTopicListender("train-news", (msg) => {
+    io.emit('train-news', msg);
+  }, false);
+
 
 var app = express();
 

@@ -10,7 +10,7 @@ exports.addTopicListender = function (topic, callback, fromOffset=true) {
   new Consumer(
       client,
       [
-          { topic: topic }
+          { topic: topic}
       ],
       {
           autoCommit: false,
@@ -18,6 +18,7 @@ exports.addTopicListender = function (topic, callback, fromOffset=true) {
       }
   ).on('message', function (message) {
       console.log(message);
-      callback(message);
+      let parsed = JSON.parse(message.value);
+      callback(parsed);
   });
 };

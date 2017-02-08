@@ -27,8 +27,8 @@
 
 
 
-  (def producer (create-producer (:brokers config)))
-  (def topic (:topic config))
+  (def ^:private producer (create-producer (:brokers config)))
+  (def ^:private topic (:topic config))
 
 
   (defn write-to-kafka

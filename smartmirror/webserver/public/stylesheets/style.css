@@ -21,8 +21,8 @@ p {
 }
 .module {
   padding: 20px;
-  height: 344px;
-  max-height: 344px;
+  height: 480px;
+  max-height: 480px;
 }
 .floatLeft {
   height: 100%;
@@ -96,20 +96,20 @@ p {
 .firstTrain{
   bottom: 0;
   position: absolute;
-  font-size: 20px;
+  font-size: 28px;
 }
 .secondTrain{
   bottom: 0;
   position: absolute;
-  font-size: 16px;
+  font-size: 19px;
 }
 .thirdTrain{
   bottom: 0;
   position: absolute;
-  font-size: 11px;
+  font-size: 16px;
 }
 .outer-align{
-  min-height: 183px !important;
+  min-height: 290px !important;
   overflow: hidden;
 }
 td.train-times {
@@ -118,4 +118,7 @@ td.train-times {
 td.station {
   padding-left: 6px;
   text-overflow: ellipsis;
+}
+.seperator{
+  height: 10px;
 }
