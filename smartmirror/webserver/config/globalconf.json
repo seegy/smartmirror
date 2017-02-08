@@ -3,6 +3,7 @@
         "zookeeper": {
             "url": "localhost:2181"
         },
-        "clientId": "mirrorserver"
+        "clientId": "mirrorserver",
+        "topics" : ["train-news", "weather-news-giessen", "weather-news-frankfurt"]
     }
 }

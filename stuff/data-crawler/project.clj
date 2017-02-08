@@ -1,4 +1,4 @@
-(defproject train-crawler "0.1.0-SNAPSHOT"
+(defproject data-crawler "0.1.0-SNAPSHOT"
   :description "FIXME: write description"
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
@@ -11,4 +11,4 @@
                  [clj-http "2.3.0"]
                  [clj-time "0.13.0"]
                  [org.clojure/data.json "0.2.6"]]
-    :main train-crawler.core)
+    :main data_crawler.core)

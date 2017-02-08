@@ -4,7 +4,8 @@ let globalConfig = require('../../config/globalconf.json');
 let zookeeperUrl = globalConfig.kafka.zookeeper.url;
 let clientId = globalConfig.kafka.clientId;
 
-exports.addTopicListender = function (topic, callback, fromOffset=true) {
+
+function addTopicListender (topic, callback, fromOffset=true) {
   let Consumer = kafka.Consumer;
   let client = new kafka.Client(zookeeperUrl, clientId);
   new Consumer(
@@ -17,8 +18,17 @@ exports.addTopicListender = function (topic, callback, fromOffset=true) {
           fromOffset: fromOffset
       }
   ).on('message', function (message) {
-      console.log(message);
+      //console.log(message);
       let parsed = JSON.parse(message.value);
       callback(parsed);
+  }).on('error', function (err) {
+      console.log(err);
+
+      // when consumer crushs, wait a second and start new consumer.
+      setTimeout(addTopicListender(topic, callback, fromOffset), 1000);
   });
 };
+
+
+
+exports.addTopicListender = addTopicListender;

@@ -1,4 +1,4 @@
-  (ns train_crawler.kafka_handler
+  (ns data_crawler.kafka_handler
     (:import (kafka.consumer Consumer ConsumerConfig KafkaStream)
              (kafka.producer KeyedMessage ProducerConfig)
              (kafka.javaapi.producer Producer)
@@ -7,7 +7,7 @@
     (:gen-class))
 
 
-  (def ^:private config (read-string (slurp "config.clj")))
+  (def ^:private config (:kafka (read-string (slurp "config.clj"))))
 
   (defn- create-producer
     "Creates a producer that can be used to send a message to Kafka"
@@ -28,10 +28,10 @@
 
 
   (def ^:private producer (create-producer (:brokers config)))
-  (def ^:private topic (:topic config))
-
 
   (defn write-to-kafka
     "write a message to kafka"
-    [message]
-    (send-to-producer producer topic message))
+    [topic message]
+    (try
+      (send-to-producer producer topic message)
+      (catch Exception e (str "caught exception: " (.getMessage e)))))

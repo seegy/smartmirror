@@ -36,7 +36,7 @@ p {
 .time {
   width: 35%;
   text-align: right;
-  font-size: 50px;
+  font-size: 38px;
 }
 .vcenter {
   width: 100%;
@@ -96,12 +96,13 @@ p {
 .firstTrain{
   bottom: 0;
   position: absolute;
-  font-size: 28px;
+  font-size: 26px;
 }
 .secondTrain{
   bottom: 0;
   position: absolute;
-  font-size: 19px;
+  font-size: 20px;
+  padding-left: 10px;
 }
 .thirdTrain{
   bottom: 0;
@@ -115,10 +116,18 @@ p {
 td.train-times {
   font-weight: bold;
 }
-td.station {
+td.train-delay{
+  font-size: 75% !important;
+}
+td.train-station {
   padding-left: 6px;
   text-overflow: ellipsis;
 }
 .seperator{
   height: 10px;
+}
+.icon:before {
+	font-family: 'MeteoconsRegular';
+	content: attr(data-icon);
+  font-size: 110%;
 }

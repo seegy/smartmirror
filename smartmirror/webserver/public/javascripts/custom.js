@@ -16,8 +16,8 @@ function startTime() {
     var days = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
     wd = days[wd]
 
-    document.getElementById('clock').innerHTML
-      = h + ":" + m + "<br>"+ wd +" " + d + "." + mo + "." + y;
+      $('#clock').html( h + ":" + m);
+      $('#date').html( wd +" " + d + "." + mo + "." + y);
     var t = setTimeout(startTime, 1000);
 }
 function checkTime(i) {
@@ -34,7 +34,7 @@ socket.on('train-news', function(msg){
   // console.log(msg[0]);
 
   //  complete message?
-  if( msg.length == 3) {
+  if( msg.length >= 2) {
 // TODO ask for a real change!
     var newContent = new Array();
 
@@ -47,28 +47,28 @@ socket.on('train-news', function(msg){
 
           newContent[i] += '<tr>';
           newContent[i] += '<td class="train-times"></td>';
-          newContent[i] += '<td> ... </td>';
-          newContent[i] += '<td class="station"></td>';
+          newContent[i] += '<td class="train-delay"> ... </td>';
+          newContent[i] += '<td class="train-station"></td>';
           newContent[i] += '<tr>';
 
         } else e1.forEach(function(e2, i2, a2){
 
           newContent[i] += '<tr>';
           newContent[i] += '<td class="train-times">' + e2['time'] + '</td>';
-          newContent[i] += '<td>' + e2['delay'] + '</td>';
-          newContent[i] += '<td class="station">' + e2['station'] + '</td>';
+          newContent[i] += '<td class="train-delay">' + e2['delay'] + '</td>';
+          newContent[i] += '<td class="train-station">' + e2['station'] + '</td>';
           newContent[i] += '<tr>';
         });
 
         newContent[i] += '<tr>';
-        newContent[i] += '<td class="train-times"><div class="seperator" ></div> </td>';
+        newContent[i] += '<td class="train-times"><div class="seperator line" ></div> </td>';
         newContent[i] += '<tr>';
       });
 
       newContent[i] += '</tbody></table>';
     });
 
-    var trainEles = ['.firstTrain', '.secondTrain', '.thirdTrain']
+    var trainEles = ['.firstTrain', '.secondTrain']
 
     trainEles.forEach(function(e,i,a){
       $(e).empty();
@@ -76,4 +76,34 @@ socket.on('train-news', function(msg){
     });
 
   }
+});
+
+
+var iconMatch = {
+  "01d" : "B",
+  "02d" : "H",
+  "03d" : "N",
+  "04d" : "Y",
+  "09d" : "Q",
+  "10d" : "R",
+  "11d" : "P",
+  "13d" : "W",
+  "50d" : "M",
+  "01n" : "C",
+  "02n" : "I",
+  "03n" : "N",
+  "04n" : "Y",
+  "09n" : "Q",
+  "10n" : "R",
+  "11n" : "P",
+  "13n" : "W",
+  "50n" : "M"
+};
+
+socket.on('weather-news-giessen', function(msg){
+  msg = JSON.parse(msg);
+  var owmIcon = msg["weather"][0]["icon"];
+  var temp = msg.main.temp;
+  $('#headWeatherIcon').attr("data-icon", iconMatch[owmIcon]);
+  $('#headTemp').html(temp);
 });
