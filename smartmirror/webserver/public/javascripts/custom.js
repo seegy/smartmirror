@@ -30,15 +30,20 @@ function checkTime(i) {
 var socket = io('http://localhost:3001');
 
 socket.on('train-news', function(msg){
-  // console.log(msg);
+   console.log(msg);
   // console.log(msg[0]);
 
+  if(msg !== null && typeof msg !== 'object'){
+    msg = JSON.parse(msg);
+  }
+
+
   //  complete message?
-  if( msg.length >= 2) {
+  if( msg.to == "Frankfurt(Main)West" && msg.from == "Gießen Licher Str") {
 // TODO ask for a real change!
     var newContent = new Array();
 
-    msg.forEach(function(e,i,a){
+    msg.data.forEach(function(e,i,a){
       newContent[i] = '<table><tbody>';
 
       e.forEach(function(e1, i1, a1) {
@@ -100,10 +105,27 @@ var iconMatch = {
   "50n" : "M"
 };
 
-socket.on('weather-news-giessen', function(msg){
-  msg = JSON.parse(msg);
-  var owmIcon = msg["weather"][0]["icon"];
-  var temp = msg.main.temp;
-  $('#headWeatherIcon').attr("data-icon", iconMatch[owmIcon]);
-  $('#headTemp').html(temp);
+socket.on('weather-news', function(msg){
+
+  if(msg !== null && typeof msg !== 'object'){
+    msg = JSON.parse(msg);
+  }
+
+  console.log(msg);
+
+  if(msg.location == "giessen"){
+    var owmIcon = msg.data.weather[0].icon;
+    var temp = msg.data.main.temp;
+    $('#headWeatherIcon').attr("data-icon", iconMatch[owmIcon]);
+    $('#headTemp').html(temp.toFixed(1));
+  }
+});
+
+socket.on('weather-forecast', function(msg){
+  if(msg !== null && typeof msg !== 'object'){
+    msg = JSON.parse(msg);
+  }
+
+  console.log(msg);
+
 });

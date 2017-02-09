@@ -131,3 +131,29 @@ td.train-station {
 	content: attr(data-icon);
   font-size: 110%;
 }
+.icon.forecast:before {
+	font-family: 'MeteoconsRegular';
+	content: attr(data-icon);
+  font-size: 1000%;
+}
+.forecast-font{
+  font-size: 30px;
+  text-align: right;
+}
+.weather-head{
+  text-align: center;
+  margin-top: 35px;
+  font-size: 40px;
+}
+.icon.forecast-temp:before {
+	font-family: 'MeteoconsRegular';
+	content: attr(data-icon);
+  font-size: 120%;
+  margin-left: -10px;
+}
+.forecast-placer {
+      height: 30px;
+}
+.bold {
+  font-weight: bold;
+}
