@@ -102,7 +102,9 @@
   (.start (Thread. (fn []
                      (while true
                        (when-not (nil? @data)
-                         (write-to-kafka topic (json/write-str @data))
+                         (write-to-kafka topic (json/write-str {:from "Gießen Licher Str"
+                                                                :to "Frankfurt(Main)West"
+                                                                :data @data}))
                          (println "wrote train connections to kafka"))
                        (Thread/sleep push-sleeptime))))))
 
