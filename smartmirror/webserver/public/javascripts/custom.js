@@ -1,4 +1,5 @@
-
+var DEBUG = false;
+var days = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
 
 function startTime() {
     var today = new Date();
@@ -13,34 +14,38 @@ function startTime() {
     d = checkTime(d);
     mo = checkTime(mo);
 
-    var days = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
+
     wd = days[wd]
 
       $('#clock').html( h + ":" + m);
       $('#date').html( wd +" " + d + "." + mo + "." + y);
     var t = setTimeout(startTime, 1000);
 }
+
 function checkTime(i) {
     if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
     return i;
 }
 
+function replaceAll(str, find, replace) {
+  return str.replace(new RegExp(find, 'g'), replace);
+}
 
 
 var socket = io('http://localhost:3001');
 
 socket.on('train-news', function(msg){
-   console.log(msg);
-  // console.log(msg[0]);
-
   if(msg !== null && typeof msg !== 'object'){
     msg = JSON.parse(msg);
   }
 
+  var mod = $("div[type='trains'][from='" + msg.from + "'][to='" + msg.to + "']");
 
   //  complete message?
-  if( msg.to == "Frankfurt(Main)West" && msg.from == "Gießen Licher Str") {
+  //if( msg.to == "Frankfurt(Main)West" && msg.from == "Gießen Licher Str") {
 // TODO ask for a real change!
+
+  var fillData = function (){
     var newContent = new Array();
 
     msg.data.forEach(function(e,i,a){
@@ -66,7 +71,7 @@ socket.on('train-news', function(msg){
         });
 
         newContent[i] += '<tr>';
-        newContent[i] += '<td class="train-times"><div class="seperator line" ></div> </td>';
+        newContent[i] += '<td class="train-times"><div class="seperator line" ></div></td>';
         newContent[i] += '<tr>';
       });
 
@@ -81,6 +86,30 @@ socket.on('train-news', function(msg){
     });
 
   }
+
+
+  if (mod[0] === undefined){
+    console.log('module unknown for trains: '+ msg.from + ',' + msg.to);
+
+    $.ajax({
+    url : "/html/trains-modul.html",
+    success : function(result){
+
+          result = replaceAll(result, "###1###",  msg.from)
+          result = replaceAll(result, "###2###",  msg.to);
+
+          $('div.main').append(result)
+
+          mod = $("div[type='trains'][from='" + msg.from + "'][to='" + msg.to + "']");
+          fillData();
+        }
+    });
+
+  } else {
+    fillData();
+  }
+
+
 });
 
 
@@ -105,13 +134,17 @@ var iconMatch = {
   "50n" : "M"
 };
 
+function degToCompass(num) {
+    var val = Math.floor((num / 22.5) + 0.5);
+    var arr = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"];
+    return arr[(val % 16)];
+}
+
 socket.on('weather-news', function(msg){
 
   if(msg !== null && typeof msg !== 'object'){
     msg = JSON.parse(msg);
   }
-
-  console.log(msg);
 
   if(msg.location == "giessen"){
     var owmIcon = msg.data.weather[0].icon;
@@ -126,6 +159,97 @@ socket.on('weather-forecast', function(msg){
     msg = JSON.parse(msg);
   }
 
+  var loc = msg.location.toUpperCase();
+  var dat = msg.data;
+
+  var mod = $("div[type='weather-forecast'][location='" + loc + "']");
+
+  var fillData = function (){
+    for (i = 0; i < 3; i++) {
+        var submod = mod.find("div[order='" + i + "']")
+        var data = dat[i]
+
+        submod.find("a.icon.forecast").attr("data-icon", iconMatch[data.weather[0].icon])
+        submod.find(".temp").html(data.main.temp.toFixed(1));
+        submod.find(".humi").html(data.main.humidity.toFixed(1) + "%");
+        submod.find(".wind").html(degToCompass(data.wind.deg));
+
+        var today = new Date(data.dt * 1000);
+        var wd = today.getDay();
+
+        submod.find(".wd").html(days[wd]);
+
+    }
+  }
+
+  if (mod[0] === undefined){
+    console.log('module unknown for weather-forecast: '+ loc);
+
+    $.ajax({
+    url : "/html/weather-forecast-modul.html",
+    success : function(result){
+
+          result = result.replace("###1###", loc).replace("###2###", loc);
+
+          $('div.main').append(result)
+
+          mod = $("div[type='weather-forecast'][location='" + loc + "']");
+          fillData();
+        }
+    });
+
+  } else {
+    fillData();
+  }
+});
+
+
+var hideTime = new Date();
+
+function hideEverything (){
+
+    if(DEBUG){
+      return;
+    }
+
+    var main = $('div.main');
+    var now = new Date();
+
+    if(hideTime < now) {
+      console.log("hide!");
+      $('div.main').hide(1000);
+      //$('div.main').attr('display', 'none !important');
+    } else {
+      var diff = hideTime - now;
+      setTimeout(hideEverything, diff);
+    }
+}
+
+setTimeout(hideEverything, 1000);
+
+socket.on('faces', function(msg){
+  if(msg !== null && typeof msg !== 'object'){
+    msg = JSON.parse(msg);
+  }
   console.log(msg);
 
+  //{"found" : true, "person": "any"}
+
+  if(msg.found){
+    console.log('test');
+    $('div.main').show(1000);
+
+    var diff = 5 * 1000;
+    var newDateObj = new Date(new Date().getTime() + diff);
+
+    hideTime = newDateObj;
+
+    if(msg.person == "any"){ // unknown person
+
+    } else { // known person
+      //TODO
+    }
+
+    setTimeout(hideEverything, diff);
+  }
 });

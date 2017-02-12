@@ -19,8 +19,13 @@ function addTopicListender (topic, callback, fromOffset=true) {
       }
   ).on('message', function (message) {
       //console.log(message);
-      let parsed = JSON.parse(message.value);
-      callback(parsed);
+      try {
+        let parsed = JSON.parse(message.value);
+        callback(parsed);
+      } catch (e) {
+        console.log('unparseable kafka msg: ' + e);
+      }
+
   }).on('error', function (err) {
       console.log(err);
 

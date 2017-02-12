@@ -4,6 +4,6 @@
             "url": "localhost:2181"
         },
         "clientId": "mirrorserver",
-        "topics" : ["train-news", "weather-news", "weather-forecast"]
+        "topics" : ["train-news", "weather-news", "weather-forecast", "faces"]
     }
 }
