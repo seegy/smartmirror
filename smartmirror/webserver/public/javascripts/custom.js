@@ -1,5 +1,9 @@
 var DEBUG = false;
 var scrollInterval = 5000; // ms
+var serverhost = "http://localhost"
+var hideInterval = 3000;
+
+
 var days = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
 
 function startTime() {
@@ -120,7 +124,7 @@ function init() {
 
     startTime();
 
-    var socket = io('http://localhost:3001');
+    var socket = io(serverhost + ':3001');
 
     socket.on('train-news', function(msg) {
         if (msg !== null && typeof msg !== 'object') {
@@ -288,8 +292,7 @@ function init() {
         if (msg.found) {
             $('div.main').show(1000);
 
-            var diff = 5 * 1000;
-            var newDateObj = new Date(new Date().getTime() + diff);
+            var newDateObj = new Date(new Date().getTime() + hideInterval);
 
             hideTime = newDateObj;
 
@@ -299,7 +302,7 @@ function init() {
                 //TODO
             }
 
-            setTimeout(hideEverything, diff);
+            setTimeout(hideEverything, hideInterval);
         }
     });
 }
