@@ -7,5 +7,5 @@ let topics = globalConfig.kafka.topics;
 topics.forEach((t, i) => {
   kafka.addTopicListender(t, (msg) => {
       io.emit(t, msg);
-    }, false);
+    }, true);
 })

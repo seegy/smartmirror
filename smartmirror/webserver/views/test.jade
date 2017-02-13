@@ -1,0 +1,335 @@
+extends layouttest
+
+block content
+  div.main
+    div.module#head      
+      div.row.vcenter
+        div.col-md-7.welcome
+          p Hallo.
+        div.col-md-4.col-md-offset-1.time
+          div.row
+            div.col-md-12#clock    
+            div.col-md-12#date
+            div.col-md-12
+              div.row
+                div.col-md-4.col-md-offset-3
+                  a(data-icon='A').icon#headWeatherIcon
+                div.col-md-3#headTemp
+                div.col-md-1
+                  a(data-icon='*').icon
+    .jcarousel(data-jcarousel='true')
+      // div.carousel-inner.module-hook
+      ul.module-hook(style='left: 0px; top: 0px;')
+        li
+          .module(type='weather-forecast', location='GIESSEN')
+            .liner
+              .floatLeft.noline
+              .floatLeft.line  
+              .floatLeft.noline
+            .row
+              .col-md-4.col-md-offset-4.weather-head
+                p GIESSEN
+            .row
+              .col-md-4(order='0')
+                .row
+                  .col-md-5
+                    a.icon.forecast(data-icon='B')
+                  .col-md-6.forecast-font
+                    .row
+                      .col-md-12.forecast-placer
+                      .col-md-8
+                        p.temp 6.2
+                      .col-md-4
+                        a.icon.forecast-temp(data-icon='*')
+                      .col-md-8
+                        p.humi 87.0%
+                      .col-md-4
+                        a.icon.forecast-temp(data-icon="'")
+                      .col-md-8
+                        p.wind E
+                      .col-md-4
+                        a.icon.forecast-temp(data-icon='(')
+                  .col-md-1.bold.forecast-font
+                    p.wd Mo
+              .col-md-4(order='1')
+                .row
+                  .col-md-5
+                    a.icon.forecast(data-icon='B')
+                  .col-md-6.forecast-font
+                    .row
+                      .col-md-12.forecast-placer
+                      .col-md-8
+                        p.temp 5.5
+                      .col-md-4
+                        a.icon.forecast-temp(data-icon='*')
+                      .col-md-8
+                        p.humi 68.0%
+                      .col-md-4
+                        a.icon.forecast-temp(data-icon="'")
+                      .col-md-8
+                        p.wind ESE
+                      .col-md-4
+                        a.icon.forecast-temp(data-icon='(')
+                  .col-md-1.bold.forecast-font
+                    p.wd Di
+              .col-md-4(order='2')
+                .row
+                  .col-md-5
+                    a.icon.forecast(data-icon='B')
+                  .col-md-6.forecast-font
+                    .row
+                      .col-md-12.forecast-placer
+                      .col-md-8
+                        p.temp 5.9
+                      .col-md-4
+                        a.icon.forecast-temp(data-icon='*')
+                      .col-md-8
+                        p.humi 75.0%
+                      .col-md-4
+                        a.icon.forecast-temp(data-icon="'")
+                      .col-md-8
+                        p.wind SSW
+                      .col-md-4
+                        a.icon.forecast-temp(data-icon='(')
+                  .col-md-1.bold.forecast-font
+                    p.wd Mi
+        li
+          .module(type='weather-forecast', location='FRANKFURT')
+            .liner
+              .floatLeft.noline
+              .floatLeft.line  
+              .floatLeft.noline
+            .row
+              .col-md-4.col-md-offset-4.weather-head
+                p FRANKFURT
+            .row
+              .col-md-4(order='0')
+                .row
+                  .col-md-5
+                    a.icon.forecast(data-icon='B')
+                  .col-md-6.forecast-font
+                    .row
+                      .col-md-12.forecast-placer
+                      .col-md-8
+                        p.temp 6.7
+                      .col-md-4
+                        a.icon.forecast-temp(data-icon='*')
+                      .col-md-8
+                        p.humi 87.0%
+                      .col-md-4
+                        a.icon.forecast-temp(data-icon="'")
+                      .col-md-8
+                        p.wind E
+                      .col-md-4
+                        a.icon.forecast-temp(data-icon='(')
+                  .col-md-1.bold.forecast-font
+                    p.wd Mo
+              .col-md-4(order='1')
+                .row
+                  .col-md-5
+                    a.icon.forecast(data-icon='B')
+                  .col-md-6.forecast-font
+                    .row
+                      .col-md-12.forecast-placer
+                      .col-md-8
+                        p.temp 5.5
+                      .col-md-4
+                        a.icon.forecast-temp(data-icon='*')
+                      .col-md-8
+                        p.humi 68.0%
+                      .col-md-4
+                        a.icon.forecast-temp(data-icon="'")
+                      .col-md-8
+                        p.wind ESE
+                      .col-md-4
+                        a.icon.forecast-temp(data-icon='(')
+                  .col-md-1.bold.forecast-font
+                    p.wd Di
+              .col-md-4(order='2')
+                .row
+                  .col-md-5
+                    a.icon.forecast(data-icon='B')
+                  .col-md-6.forecast-font
+                    .row
+                      .col-md-12.forecast-placer
+                      .col-md-8
+                        p.temp 5.9
+                      .col-md-4
+                        a.icon.forecast-temp(data-icon='*')
+                      .col-md-8
+                        p.humi 75.0%
+                      .col-md-4
+                        a.icon.forecast-temp(data-icon="'")
+                      .col-md-8
+                        p.wind SSW
+                      .col-md-4
+                        a.icon.forecast-temp(data-icon='(')
+                  .col-md-1.bold.forecast-font
+                    p.wd Mi
+        li
+          .module.train(type='trains', from='Gießen Licher Str', to='Frankfurt(Main)West')
+            .liner
+              .floatLeft.noline
+              .floatLeft.line  
+              .floatLeft.noline
+            .headTrain.row
+              .trainIcon.col-md-2
+                img(src='/images/bullet_train.png')
+              .fromStation.station.col-md-4
+                a Gießen Licher Str
+              .station.col-md-1
+                a →
+              .toStation.station.col-md-4
+                a Frankfurt(Main)West
+            .row.trains
+              .col-md-6.col-md-offset-1.outer-align
+                .firstTrain
+                  table
+                    tbody
+                      tr
+                        td.train-times 12:14 
+                        td.train-delay +9
+                        td.train-station Gießen Licher Str
+                      tr
+                      tr
+                        td.train-times 12:18 
+                        td.train-delay +9
+                        td.train-station Gießen
+                      tr
+                      tr
+                        td.train-times
+                          .seperator.line
+                      tr
+                      tr
+                        td.train-times 12:28 
+                        td.train-delay +0
+                        td.train-station Gießen
+                      tr
+                      tr
+                        td.train-times 13:20 
+                        td.train-delay +0
+                        td.train-station Frankfurt(Main)West
+                      tr
+                      tr
+                        td.train-times
+                          .seperator.line
+                      tr
+              .col-md-5.outer-align
+                .secondTrain
+                  table
+                    tbody
+                      tr
+                        td.train-times 12:21
+                        td.train-delay
+                        td.train-station Friedensstraße, Gießen
+                      tr
+                      tr
+                        td.train-times 12:40
+                        td.train-delay
+                        td.train-station Bahnhof, Gießen
+                      tr
+                      tr
+                        td.train-times
+                          .seperator.line
+                      tr
+                      tr
+                        td.train-times 12:54 
+                        td.train-delay +0
+                        td.train-station Gießen
+                      tr
+                      tr
+                        td.train-times 13:11 
+                        td.train-delay +0
+                        td.train-station Friedberg(Hess)
+                      tr
+                      tr
+                        td.train-times
+                          .seperator.line
+                      tr
+                      tr
+                        td.train-times 13:16 
+                        td.train-delay +0
+                        td.train-station Friedberg(Hess)
+                      tr
+                      tr
+                        td.train-times 13:46 
+                        td.train-delay +0
+                        td.train-station Frankfurt(Main)West
+                      tr
+                      tr
+                        td.train-times
+                          .seperator.line
+                      tr
+        li
+          .module(type='weather-forecast', location='GIESSEN')
+            .liner
+              .floatLeft.noline
+              .floatLeft.line  
+              .floatLeft.noline
+            .row
+              .col-md-4.col-md-offset-4.weather-head
+                p NICHT GIESSEN
+            .row
+              .col-md-4(order='0')
+                .row
+                  .col-md-5
+                    a.icon.forecast(data-icon='B')
+                  .col-md-6.forecast-font
+                    .row
+                      .col-md-12.forecast-placer
+                      .col-md-8
+                        p.temp 6.2
+                      .col-md-4
+                        a.icon.forecast-temp(data-icon='*')
+                      .col-md-8
+                        p.humi 87.0%
+                      .col-md-4
+                        a.icon.forecast-temp(data-icon="'")
+                      .col-md-8
+                        p.wind E
+                      .col-md-4
+                        a.icon.forecast-temp(data-icon='(')
+                  .col-md-1.bold.forecast-font
+                    p.wd Mo
+              .col-md-4(order='1')
+                .row
+                  .col-md-5
+                    a.icon.forecast(data-icon='B')
+                  .col-md-6.forecast-font
+                    .row
+                      .col-md-12.forecast-placer
+                      .col-md-8
+                        p.temp 5.5
+                      .col-md-4
+                        a.icon.forecast-temp(data-icon='*')
+                      .col-md-8
+                        p.humi 68.0%
+                      .col-md-4
+                        a.icon.forecast-temp(data-icon="'")
+                      .col-md-8
+                        p.wind ESE
+                      .col-md-4
+                        a.icon.forecast-temp(data-icon='(')
+                  .col-md-1.bold.forecast-font
+                    p.wd Di
+              .col-md-4(order='2')
+                .row
+                  .col-md-5
+                    a.icon.forecast(data-icon='B')
+                  .col-md-6.forecast-font
+                    .row
+                      .col-md-12.forecast-placer
+                      .col-md-8
+                        p.temp 5.9
+                      .col-md-4
+                        a.icon.forecast-temp(data-icon='*')
+                      .col-md-8
+                        p.humi 75.0%
+                      .col-md-4
+                        a.icon.forecast-temp(data-icon="'")
+                      .col-md-8
+                        p.wind SSW
+                      .col-md-4
+                        a.icon.forecast-temp(data-icon='(')
+                  .col-md-1.bold.forecast-font
+                    p.wd Mi

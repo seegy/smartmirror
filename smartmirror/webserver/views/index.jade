@@ -1,7 +1,7 @@
 extends layout
 
 block content
-  div.main
+  div.main(onload="init()")
     div.module#head      
       div.row.vcenter
         div.col-md-7.welcome
@@ -17,10 +17,7 @@ block content
                 div.col-md-3#headTemp
                 div.col-md-1
                   a(data-icon='*').icon
-    
-            
-        
-
-      
-      
+    div(data-jcarousel="true").jcarousel.slide
+      //div.carousel-inner.module-hook
+      ul(style="left: 0px; top: 0px;").module-hook
     
