@@ -1,6 +1,5 @@
 var DEBUG = false;
 var scrollInterval = 5000; // ms
-var serverhost = "http://localhost"
 var hideInterval = 3000;
 
 
@@ -124,7 +123,7 @@ function init() {
 
     startTime();
 
-    var socket = io(serverhost + ':3001');
+    var socket = io();
 
     socket.on('train-news', function(msg) {
         if (msg !== null && typeof msg !== 'object') {
