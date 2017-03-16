@@ -2,13 +2,13 @@ extends layout
 
 block content
   div.main(onload="init()")
-    div.module#head      
+    div.module#head
       div.row.vcenter
         div.col-md-7.welcome
           p Hallo.
         div.col-md-4.col-md-offset-1.time
           div.row
-            div.col-md-12#clock    
+            div.col-md-12#clock
             div.col-md-12#date
             div.col-md-12
               div.row
@@ -20,4 +20,3 @@ block content
     div(data-jcarousel="true").jcarousel.slide
       //div.carousel-inner.module-hook
       ul(style="left: 0px; top: 0px;").module-hook
-    

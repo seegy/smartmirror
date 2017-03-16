@@ -123,7 +123,7 @@ function init() {
 
     startTime();
 
-    var socket = io();
+    var socket = io('http://localhost:3000');
 
     socket.on('train-news', function(msg) {
         if (msg !== null && typeof msg !== 'object') {
@@ -184,7 +184,7 @@ function init() {
             console.log('module unknown for trains: ' + msg.from + ',' + msg.to);
 
             $.ajax({
-                url: "/html/trains-modul.html",
+                url: "./html/trains-modul.html",
                 success: function(result) {
 
                     result = replaceAll(result, "###1###", msg.from)
@@ -258,7 +258,7 @@ function init() {
             console.log('module unknown for weather-forecast: ' + loc);
 
             $.ajax({
-                url: "/html/weather-forecast-modul.html",
+                url: "./html/weather-forecast-modul.html",
                 success: function(result) {
 
                     result = result.replace("###1###", loc).replace("###2###", loc);
