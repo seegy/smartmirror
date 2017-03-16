@@ -1,6 +1,6 @@
-var DEBUG = false;
+var DEBUG = true;
 var scrollInterval = 5000; // ms
-var hideInterval = 3000;
+var hideInterval = 5000;
 
 
 var days = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
