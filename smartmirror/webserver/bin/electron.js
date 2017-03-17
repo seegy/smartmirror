@@ -15,7 +15,11 @@ server.listen(3000);
 let win;
 
 function createWindow() {
-  win= new BrowserWindow({fullscreen:true});
+  win= new BrowserWindow({fullscreen: true,
+                          title: "SmartMirror",
+                          skipTaskbar: true
+
+                        });
 
   win.loadURL(`file://${__dirname}/../views/index.pug`);
 
