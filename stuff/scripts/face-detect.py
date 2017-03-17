@@ -102,7 +102,7 @@ if __name__ == "__main__":
 
             if ids :
                 print( strftime("%Y-%m-%d %H:%M:%S", gmtime()) + ': found a face! {}'.format(ids))
-                producer.send(topic, '{"found" : true, "person": "{}"}'.format(ids))
+                producer.send(topic, '{"found" : true, "person": ' + str(ids) + '}')
 
             os.remove(image_file)
             sleep(0.1)
