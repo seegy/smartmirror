@@ -3,7 +3,7 @@ var scrollInterval = 5000; // ms
 var hideInterval = 5000;
 
 var people = {
-  1: "Sören",
+  1: "S&ouml;ren",
   2: "Silvia"
 }
 
@@ -108,7 +108,6 @@ function hideEverything() {
     var now = new Date();
 
     if (hideTime < now) {
-        console.log("hide!");
         $('div.main').hide(1000);
         //$('div.main').attr('display', 'none !important');
     } else {
@@ -126,7 +125,9 @@ function putName(msgPeople){
     if( msgPeople !== null && msgPeople instanceof Array){
       msgPeople = [msgPeople];
     }
-    var names = msgPeople.map(function(x){people[x]}).join(' und ');
+
+    var names = msgPeople.map(function(x){ return people[x]; })
+    names = names.join(' und ');
 
     $('#hello').html('Hallo, ' + names + '.')
   }
@@ -336,7 +337,6 @@ function init() {
 // ############ Carousel #############
 
 function scroll(){
-  console.log('scroll!');
   $('.jcarousel').jcarousel('scroll', '+=1');
   setTimeout(scroll, scrollInterval);
 }
