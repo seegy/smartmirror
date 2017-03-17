@@ -3,28 +3,27 @@
 const {app, BrowserWindow} = require('electron');
 const locals = {/* ...*/};
 const pug = require('electron-pug')({pretty: true}, locals);
+const electron = require('electron');
+const dialog = electron.dialog;
 
 // Standard stuff
 
 var server = require('http').createServer();
 var sio = require('../routes/modules/sio');
 sio.create(server);
-
 server.listen(3000);
 
 let win;
 
 function createWindow() {
   win= new BrowserWindow({fullscreen: true,
-                          title: "SmartMirror",
-                          skipTaskbar: true
-
+                          title: "SmartMirror"
                         });
 
   win.loadURL(`file://${__dirname}/../views/index.pug`);
 
   //win.webContents.openDevTools()
-
+  win.setMenuBarVisability(false);
 
   // Emitted when the window is closed.
   win.on('closed', () => {
@@ -33,10 +32,15 @@ function createWindow() {
     // when you should delete the corresponding element.
     win = null
   })
-
 }
 
 app.on('ready', createWindow);
+
+// Disable error dialogs by overriding
+// FIX: https://goo.gl/YsDdsS
+dialog.showErrorBox = function(title, content) {
+    console.log(`${title}\n${content}`);
+};
 
 
 // Quit when all windows are closed.
