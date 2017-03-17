@@ -23,7 +23,7 @@ function createWindow() {
   win.loadURL(`file://${__dirname}/../views/index.pug`);
 
   //win.webContents.openDevTools()
-  win.setMenuBarVisability(false);
+  win.setMenuBarVisibility(false);
 
   // Emitted when the window is closed.
   win.on('closed', () => {
@@ -39,7 +39,7 @@ app.on('ready', createWindow);
 // Disable error dialogs by overriding
 // FIX: https://goo.gl/YsDdsS
 dialog.showErrorBox = function(title, content) {
-    console.log(`${title}\n${content}`);
+    //console.log(`${title}\n${content}`);
 };
 
 
