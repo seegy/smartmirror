@@ -2,6 +2,11 @@ var DEBUG = false;
 var scrollInterval = 5000; // ms
 var hideInterval = 5000;
 
+var people = {
+  1: "Sören",
+  2: "Silvia"
+}
+
 
 var days = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
 
@@ -110,6 +115,22 @@ function hideEverything() {
         var diff = hideTime - now;
         setTimeout(hideEverything, diff);
     }
+}
+
+function putName(msgPeople){
+  if (msgPeople == "any") { // unknown person
+    $('#hello').html('Hallo, Fremder.')
+  } else { // known person
+
+    // matching the personid to a person
+    if( msgPeople !== null && msgPeople instanceof Array){
+      msgPeople = [msgPeople];
+    }
+    var names = msgPeople.map(function(x){people[x]}).join(' und ');
+
+    $('#hello').html('Hallo, ' + names + '.')
+  }
+
 }
 
 
@@ -296,17 +317,16 @@ function init() {
         //{"found" : true, "person": "any"}
 
         if (msg.found) {
+
+            putName(msg.person);
+
+            // show the ui
             $('div.main').show(1000);
 
             var newDateObj = new Date(new Date().getTime() + hideInterval);
 
             hideTime = newDateObj;
 
-            if (msg.person == "any") { // unknown person
-
-            } else { // known person
-                //TODO
-            }
 
             setTimeout(hideEverything, hideInterval);
         }
