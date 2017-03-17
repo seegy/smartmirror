@@ -1,4 +1,4 @@
-var DEBUG = true;
+var DEBUG = false;
 var scrollInterval = 5000; // ms
 var hideInterval = 5000;
 
@@ -118,6 +118,13 @@ function hideEverything() {
  //########## init stuff #############
 
 function init() {
+
+    //dynamic css
+    var cw = $('.main').height();
+    cw = cw / 16 * 9;
+    $('.main').css({'width':cw+'px'});
+    $('.main').css({'max-width':cw+'px'});
+
 
     setTimeout(hideEverything, 1000);
 

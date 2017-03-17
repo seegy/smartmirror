@@ -15,13 +15,12 @@ server.listen(3000);
 let win;
 
 function createWindow() {
-  win= new BrowserWindow({ width: 1080, height: 1920 });
+  win= new BrowserWindow({fullscreen:true});
 
   win.loadURL(`file://${__dirname}/../views/index.pug`);
 
-  win.webContents.openDevTools()
+  //win.webContents.openDevTools()
 
-  // the rest...
 
   // Emitted when the window is closed.
   win.on('closed', () => {
