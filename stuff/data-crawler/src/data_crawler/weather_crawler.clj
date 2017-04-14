@@ -12,6 +12,7 @@
 
 (def ^:private config (:weather (read-string (slurp "config.clj"))))
 (def ^:private cities (:cities config))
+(def ^:private hometown (:hometown config))
 
 
 (defn- get-weather-data [city]
@@ -61,20 +62,23 @@
   []
   (.start (Thread. (fn []
                      (while true
-                       (doseq [c cities]
-                         (try-get-weather-data c)
-                         (try-get-forecast-data c))
-                       (Thread/sleep pull-sleeptime)))))
+                       (do
+                         (try-get-weather-data hometown)
+                         (doseq [c cities]
+                           (try-get-forecast-data c))
+                         (Thread/sleep pull-sleeptime))))))
   (.start (Thread. (fn []
                      (while true
+
+                       (when-not  (nil? (get @data hometown))
+                         (write-to-kafka topic (json/write-str {:location (.toLowerCase hometown)
+                                                                :data (get @data hometown)})))
                        (doseq [c cities]
-                         (when-not (and (nil? (get @data c)) (nil? (get @forecast-data c)))
-                           (write-to-kafka topic (json/write-str {:location (.toLowerCase c)
-                                                                        :data (get @data c)}))
+                         (when-not (nil? (get @forecast-data c))
                            (write-to-kafka forecast-topic (json/write-str {:location (.toLowerCase c)
-                                                                                 :data (get @forecast-data c)}))
+                                                                           :data (get @forecast-data c)}))
                            (println (str "wrote weather data of '" c "' to kafka"))))
-                        (Thread/sleep push-sleeptime))))))
+                       (Thread/sleep push-sleeptime))))))
 
 
 

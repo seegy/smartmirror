@@ -22,13 +22,13 @@
 
 
 ;(defn get-datetime [] "date=Mo%2C+06.02.17&time=010%3A00")
-(defn- url [] (str "https://reiseauskunft.bahn.de/bin/query.exe/dn?revia=yes&existOptimizePrice=1&country=DEU&dbkanal_007=L01_S01_D001_KIN0001_qf-bahn-svb-kl2_lz03&start=1&REQ0JourneyStopsS0A=1&S=Gie%C3%9Fen+Licher+Str&REQ0JourneyStopsSID=A%3D1%40O%3DGie%C3%9Fen+Licher+Str%40X%3D8697243%40Y%3D50581663%40U%3D80%40L%3D008003674%40B%3D1%40p%3D1485903566%40&Z=Frankfurt%28Main%29West&REQ0JourneyStopsZID=&" (get-datetime) "&timesel=depart&returnDate=&returnTime=&returnTimesel=depart&optimize=0&auskunft_travelers_number=1&tariffTravellerType.1=E&tariffTravellerReductionClass.1=0&tariffClass=2&rtMode=DB-HYBRID&externRequest=yes&HWAI=JS%21js%3Dyes%21ajax%3Dyes%21"))
+;(defn- url [] (str "https://reiseauskunft.bahn.de/bin/query.exe/dn?revia=yes&existOptimizePrice=1&country=DEU&dbkanal_007=L01_S01_D001_KIN0001_qf-bahn-svb-kl2_lz03&start=1&REQ0JourneyStopsS0A=1&S=Gie%C3%9Fen+Licher+Str&REQ0JourneyStopsSID=A%3D1%40O%3DGie%C3%9Fen+Licher+Str%40X%3D8697243%40Y%3D50581663%40U%3D80%40L%3D008003674%40B%3D1%40p%3D1485903566%40&Z=Frankfurt%28Main%29West&REQ0JourneyStopsZID=&" (get-datetime) "&timesel=depart&returnDate=&returnTime=&returnTimesel=depart&optimize=0&auskunft_travelers_number=1&tariffTravellerType.1=E&tariffTravellerReductionClass.1=0&tariffClass=2&rtMode=DB-HYBRID&externRequest=yes&HWAI=JS%21js%3Dyes%21ajax%3Dyes%21"))
 
 
 (defn get-train-conns
   "starts an request and get train connections"
-  []
-  (let [site-htree (->  (client/get (url)) :body parse as-hickory)
+  [url]
+  (let [site-htree (->  (client/get (str url "&" (get-datetime))) :body parse as-hickory)
         train-times (->>
                       (s/select (s/child (s/class "scheduledCon") ; sic
                                          (s/child (s/tag "tr"))
@@ -76,19 +76,17 @@
 (def ^:private pull-sleeptime (if (nil? (:pullInterval config)) 60000 (:pullInterval config)))
 (def ^:private push-sleeptime (if (nil? (:pushInterval config)) 60000 (:pushInterval config)))
 (def ^:private topic (if (nil? (:topic config)) "train-news" (:topic config)))
-(def ^:private data (ref nil :meta {}))
+(def ^:private data (ref {} :meta {}))
 
 
 (defn- try-get-conns []
-  (try (do
+  (try (doseq [connections (:connections config)]
          (println "Start requesting...")
-         (let [train-conns  (get-train-conns)]
+         (let [train-conns  (get-train-conns (:url connections))]
            (println "received train connections, write to kafka.")
            (dosync
-             (ref-set data train-conns))))
+             (ref-set data (assoc @data (select-keys connections [:from :to]) train-conns)))))
     (catch Exception e (str "caught exception: " (.getMessage e)))))
-
-
 
 
 
@@ -101,13 +99,11 @@
                        (Thread/sleep pull-sleeptime)))))
   (.start (Thread. (fn []
                      (while true
-                       (when-not (nil? @data)
-                         (write-to-kafka topic (json/write-str {:from "Gießen Licher Str"
-                                                                :to "Frankfurt(Main)West"
-                                                                :data @data}))
-                         (println "wrote train connections to kafka"))
+                       (when-not (empty? @data)
+                         (doseq [ [id dat] @data]
+                           (write-to-kafka topic (json/write-str (assoc id :data dat)))
+                           (println "wrote train connections to kafka")))
                        (Thread/sleep push-sleeptime))))))
-
 
 
 
