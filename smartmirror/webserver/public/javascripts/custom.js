@@ -201,8 +201,8 @@ function init() {
             var trainEles = ['.firstTrain', '.secondTrain']
 
             trainEles.forEach(function(e, i, a) {
-                $(e).empty();
-                $(e).append(newContent[i]);
+                mod.find(e).empty();
+                mod.find(e).append(newContent[i]);
             });
 
             resetCarousel();
