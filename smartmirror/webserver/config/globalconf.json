@@ -5,5 +5,10 @@
         },
         "clientId": "mirrorserver",
         "topics" : ["train-news", "weather-news", "weather-forecast", "faces"]
+    },
+    "redis": {
+      "host": "127.0.0.1",
+      "port": 6379,
+      "topics" : ["train-news", "weather-news", "weather-forecast", "faces"]
     }
 }

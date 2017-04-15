@@ -66,6 +66,8 @@ p {
 }
 .station {
       margin-top: 45px;
+      overflow: hidden;
+      white-space: nowrap
   /*max-width: 330px;
   margin: 0 20px 0 20px;*/
 }
@@ -125,6 +127,8 @@ td.train-delay{
 td.train-station {
   padding-left: 6px;
   text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap
 }
 .seperator{
   height: 10px;

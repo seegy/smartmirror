@@ -246,7 +246,7 @@ function init() {
 
         var wIcon = $('#headWeatherIcon');
 
-        if (msg.location == "giessen" && wIcon.attr('latest') != msg.hash) {
+        if (wIcon.attr('latest') != msg.hash) {
             var owmIcon = msg.data.weather[0].icon;
             var temp = msg.data.main.temp;
             wIcon.attr("data-icon", iconMatch[owmIcon]);

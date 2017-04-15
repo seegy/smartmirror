@@ -29,7 +29,7 @@
 
   (def ^:private producer (create-producer (:brokers config)))
 
-  (defn write-to-kafka
+  (defn write-to-queue
     "write a message to kafka"
     [topic message]
     (try

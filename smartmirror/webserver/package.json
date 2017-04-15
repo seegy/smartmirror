@@ -21,6 +21,7 @@
     "nodemon": "^1.11.0",
     "object-hash": "^1.1.5",
     "pug": "^2.0.0-beta11",
+    "redis": "^2.7.1",
     "serve-favicon": "~2.3.2",
     "socket.io": "^1.7.2",
     "socket.io-client": "^1.7.2",

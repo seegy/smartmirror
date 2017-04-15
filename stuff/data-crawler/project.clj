@@ -7,6 +7,7 @@
                  [org.apache.kafka/kafka_2.9.2 "0.8.1.1" :exclusions [javax.jms/jms
                                                                       com.sun.jdmk/jmxtools
                                                                       com.sun.jmx/jmxri]]
+                 [com.taoensso/carmine "2.16.0"]
                  [hickory "0.7.0"]
                  [clj-http "2.3.0"]
                  [clj-time "0.13.0"]

@@ -1,5 +1,5 @@
 (ns data_crawler.weather_crawler
-  (:use [data_crawler.kafka_handler]
+  (:use [data_crawler.redis_handler]
         [hickory.core])
   (:require [hickory.select :as s]
             [clj-http.client :as client]
@@ -71,16 +71,12 @@
                      (while true
 
                        (when-not  (nil? (get @data hometown))
-                         (write-to-kafka topic (json/write-str {:location (.toLowerCase hometown)
-                                                                :data (get @data hometown)})))
+                         (write-to-queue topic (json/write-str {:location (.toLowerCase hometown)
+                                                                :data (get @data hometown)}))
+                         (println (str "wrote weather data of '" hometown "' to queue")))
                        (doseq [c cities]
                          (when-not (nil? (get @forecast-data c))
-                           (write-to-kafka forecast-topic (json/write-str {:location (.toLowerCase c)
+                           (write-to-queue forecast-topic (json/write-str {:location (.toLowerCase c)
                                                                            :data (get @forecast-data c)}))
-                           (println (str "wrote weather data of '" c "' to kafka"))))
+                           (println (str "wrote weather forecast data of '" c "' to queue"))))
                        (Thread/sleep push-sleeptime))))))
-
-
-
-
-

@@ -1,5 +1,5 @@
 (ns data_crawler.train_crawler
-  (:use [data_crawler.kafka_handler]
+  (:use [data_crawler.redis_handler]
         [hickory.core])
   (:require [hickory.select :as s]
             [clj-http.client :as client]
@@ -83,7 +83,7 @@
   (try (doseq [connections (:connections config)]
          (println "Start requesting...")
          (let [train-conns  (get-train-conns (:url connections))]
-           (println "received train connections, write to kafka.")
+           (println "received train connections, write to queue.")
            (dosync
              (ref-set data (assoc @data (select-keys connections [:from :to]) train-conns)))))
     (catch Exception e (str "caught exception: " (.getMessage e)))))
@@ -91,7 +91,7 @@
 
 
 (defn start-train-producer
-  "starts two threads for grapping data from bahn.de and push infos to kafka with different intervals."
+  "starts two threads for grapping data from bahn.de and push infos to queue with different intervals."
   []
   (.start (Thread. (fn []
                      (while true
@@ -101,8 +101,8 @@
                      (while true
                        (when-not (empty? @data)
                          (doseq [ [id dat] @data]
-                           (write-to-kafka topic (json/write-str (assoc id :data dat)))
-                           (println "wrote train connections to kafka")))
+                           (write-to-queue topic (json/write-str (assoc id :data dat)))
+                           (println "wrote train connections to queue")))
                        (Thread/sleep push-sleeptime))))))
 
 
