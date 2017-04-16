@@ -30,6 +30,7 @@ p {
   padding: 20px;
   height: 480px;
   max-height: 480px;
+  width: 1080px;
 }
 .floatLeft {
   height: 100%;
@@ -67,15 +68,19 @@ p {
 .station {
       margin-top: 45px;
       overflow: hidden;
+      text-overflow: ellipsis;
       white-space: nowrap
   /*max-width: 330px;
   margin: 0 20px 0 20px;*/
 }
-.toStation {
-  text-align: right;
+.fromStation{
+      text-align: right;
 }
-.trainIcon{
+
+.toStation{
+      text-align: left;
 }
+
 .trainIcon img{
   width: 90%;
 }
@@ -102,14 +107,15 @@ p {
   position: relative;
   width: 100%;
   top: -5px;
+  padding-top: 30px;
 }
 .firstTrain{
-  bottom: 0;
+  /*bottom: 0;*/
   position: absolute;
   font-size: 26px;
 }
 .secondTrain{
-  bottom: 0;
+  /*bottom: 0;*/
   position: absolute;
   font-size: 20px;
   padding-left: 10px;
@@ -117,6 +123,7 @@ p {
 .outer-align{
   min-height: 290px !important;
   overflow: hidden;
+  text-overflow: ellipsis;
 }
 td.train-times {
   font-weight: bold;
@@ -126,8 +133,8 @@ td.train-delay{
 }
 td.train-station {
   padding-left: 6px;
-  text-overflow: ellipsis;
   overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap
 }
 .seperator{

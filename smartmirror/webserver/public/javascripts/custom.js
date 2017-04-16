@@ -1,4 +1,4 @@
-var DEBUG = false;
+var DEBUG = true;
 var scrollInterval = 5000; // ms
 var hideInterval = 5000;
 

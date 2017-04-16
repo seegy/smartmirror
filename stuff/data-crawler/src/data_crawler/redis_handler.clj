@@ -16,6 +16,6 @@
     [channel message]
     (try
       (wcar* (car/publish channel message))
-      (catch Exception e (str "caught exception: " (.getMessage e)))))
+      (catch Exception e (println (str "caught exception: " (.getMessage e))))))
 
 ;(write-to-redis "weather-news" "Hello to foofdgsdgbar!")
