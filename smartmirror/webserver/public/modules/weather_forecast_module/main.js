@@ -33,7 +33,7 @@ function main(socket) {
                     console.log('module unknown for weather-forecast: ' + loc);
 
                     $.ajax({
-                        url: "./html/weather-forecast-modul.html",
+                        url: "./modules/weather_forecast_module/view.html",
                         success: function(result) {
 
                             result = result.replace("###1###", loc).replace("###2###", loc);

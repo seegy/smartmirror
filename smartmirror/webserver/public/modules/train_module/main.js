@@ -55,7 +55,7 @@ function main (socket) {
             console.log('module unknown for trains: ' + msg.from + ',' + msg.to);
 
             $.ajax({
-                url: "./html/trains-modul.html",
+                url: "./modules/train_module/view.html",
                 success: function(result) {
 
                     result = replaceAll(result, "###1###", msg.from)
