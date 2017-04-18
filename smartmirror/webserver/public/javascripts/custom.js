@@ -154,6 +154,7 @@ function init() {
 
     var socket = io('http://localhost:3000');
 
+/*
     socket.on('train-news', function(msg) {
         if (msg !== null && typeof msg !== 'object') {
             msg = JSON.parse(msg);
@@ -237,6 +238,37 @@ function init() {
           //nothing to change...
         }
     });
+    */
+
+    var PATH_TO_MODULE_LIST = "./modules/modules.json";
+
+    $.ajax({
+      url: PATH_TO_MODULE_LIST,
+      success: function(data) {
+          console.log(data); // Data returned
+
+          eval(data).forEach((m, i) => {
+              console.log(m);
+
+              $.ajax({
+                  url: "./modules/" + m + "/main.js",
+                  dataType: "text",
+                  success: function(result) {
+                      //console.log( mod_data ); // Data returned
+                    //  console.log(mod_data)
+                      //  eval(result)(socket);
+                  //      JSON.parse(result);
+                  var data = new Object();
+                  data.func = result;
+                  var jsonVal = JSON.stringify(data);
+                  var newObj = $.parseJSON(jsonVal);
+                  eval(newObj.func);
+                  main(socket);
+                  }
+              });
+          });
+      }
+  });
 
     socket.on('weather-news', function(msg) {
 
@@ -255,6 +287,7 @@ function init() {
         }
     });
 
+/*
     socket.on('weather-forecast', function(msg) {
         if (msg !== null && typeof msg !== 'object') {
             msg = JSON.parse(msg);
@@ -308,7 +341,7 @@ function init() {
         } else {
             // nothing to change...
         }
-    });
+    });*/
 
     socket.on('faces', function(msg) {
         if (msg !== null && typeof msg !== 'object') {
@@ -325,9 +358,7 @@ function init() {
             $('div.main').show(1000);
 
             var newDateObj = new Date(new Date().getTime() + hideInterval);
-
             hideTime = newDateObj;
-
 
             setTimeout(hideEverything, hideInterval);
         }

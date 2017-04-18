@@ -22,7 +22,7 @@ function createWindow() {
 
   win.loadURL(`file://${__dirname}/../views/index.pug`);
 
-  //win.webContents.openDevTools()
+  win.webContents.openDevTools()
   win.setMenuBarVisibility(false);
 
   // Emitted when the window is closed.
