@@ -69,7 +69,7 @@ typings/
 .lein-plugins/
 .lein-failures
 .nrepl-port
-stuff/data-crawler/config.clj
+*/config.clj
 
 #Mac
 *.DS_Store
