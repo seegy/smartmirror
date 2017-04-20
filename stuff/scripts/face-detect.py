@@ -36,6 +36,9 @@ show_windows=False
 prediction_lower_limit = 80.
 prediction_upper_limit = 100.
 
+face_max_pixels= 52
+detect_min_pixels= face_max_pixels
+
 def really_a_face (inner_face):
 
     eyes = eye_cascade.detectMultiScale(inner_face, minSize=(10, 10))
@@ -63,13 +66,13 @@ def check_image(new_image):
     faces = face_cascade.detectMultiScale(predict_image,
                                          scaleFactor=1.1,
                                          minNeighbors=5,
-                                         minSize=(100, 100),
+                                         minSize=(detect_min_pixels, detect_min_pixels),
                                          flags = cv2.CASCADE_SCALE_IMAGE)
     for (x, y, w, h) in faces:
         inner_face= predict_image[y: y + h, x: x + w]
 
         if really_a_face(inner_face):
-            resized= scipy.misc.imresize(inner_face, ( 100. / h ))
+            resized= scipy.misc.imresize(inner_face, ( (0. + face_max_pixels ) / h ))
             nbr_predicted, conf = recognizer.predict(resized)
             print "nbr: {}, conf: {}".format(nbr_predicted, conf)
 

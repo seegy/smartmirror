@@ -22,7 +22,10 @@ nose_cascade = cv2.CascadeClassifier(noses_path)
 # For face recognition we will the the LBPH Face Recognizer
 recognizer = cv2.face.createLBPHFaceRecognizer()
 update = False
-basewidth = 300
+basewidth = 300 #TODO ?
+
+face_max_pixels= 52
+detect_min_pixels= face_max_pixels
 
 show_windows=True
 
@@ -81,14 +84,14 @@ def train_pictures(image_paths, nbr, skipCheck):
             faces = face_cascade.detectMultiScale(image,
                                                   scaleFactor=1.1,
                                                   minNeighbors=5,
-                                                  minSize=(100, 100),
+                                                  minSize=(detect_min_pixels, detect_min_pixels),
                                                   flags = cv2.CASCADE_SCALE_IMAGE)
             # If face is detected, append the face to images and the label to labels
             for (x, y, w, h) in faces:
                 inner_face= image[y: y + h, x: x + w]
 
                 if really_a_face(inner_face):
-                    resized= scipy.misc.imresize(inner_face, ( 100. / h ))
+                    resized= scipy.misc.imresize(inner_face, ( (0. + face_max_pixels) / h ))
                     images.append(resized)
                     labels.append(nbr)
                     #print "{} {} {} {} {}: Adding faces to traning set for {}...".format(image_path, y, h, x, w, nbr)

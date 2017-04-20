@@ -11,39 +11,39 @@ var people = {
 var days = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
 
 function startTime() {
-    var today = new Date();
-    var h = today.getHours();
-    var m = today.getMinutes();
-    var d = today.getDate();
-    var mo = today.getMonth() + 1;
-    var y = today.getFullYear();
-    var wd = today.getDay();
+  var today = new Date();
+  var h = today.getHours();
+  var m = today.getMinutes();
+  var d = today.getDate();
+  var mo = today.getMonth() + 1;
+  var y = today.getFullYear();
+  var wd = today.getDay();
 
-    m = checkTime(m);
-    d = checkTime(d);
-    mo = checkTime(mo);
+  m = checkTime(m);
+  d = checkTime(d);
+  mo = checkTime(mo);
 
 
-    wd = days[wd]
+  wd = days[wd]
 
-    $('#clock').html(h + ":" + m);
-    $('#date').html(wd + " " + d + "." + mo + "." + y);
-    var t = setTimeout(startTime, 1000);
+  $('#clock').html(h + ":" + m);
+  $('#date').html(wd + " " + d + "." + mo + "." + y);
+  var t = setTimeout(startTime, 1000);
 }
 
 function checkTime(i) {
-    if (i < 10) {
-        i = "0" + i
-    }; // add zero in front of numbers < 10
-    return i;
+  if (i < 10) {
+    i = "0" + i
+  }; // add zero in front of numbers < 10
+  return i;
 }
 
 function replaceAll(str, find, replace) {
-    return str.replace(new RegExp(find, 'g'), replace);
+  return str.replace(new RegExp(find, 'g'), replace);
 }
 
 function getAppendParent() {
-    return $('.module-hook');
+  return $('.module-hook');
 }
 
 var moduleCount = 0;
@@ -51,48 +51,48 @@ var moduleCount = 0;
 function appendModule(html) {
 
   console.log("add module");
-    var hook = getAppendParent();
+  var hook = getAppendParent();
 
-    html = "<li>" + html + "</li>";
+  html = "<li>" + html + "</li>";
 
-    if (moduleCount++ == 0) {
-        // make first one active
-        //html = $.parseHTML(html);
-        //html.addClass('active');
-        //html[0].className += ' active';
-        //console.log(html);
-    }
+  if (moduleCount++ == 0) {
+    // make first one active
+    //html = $.parseHTML(html);
+    //html.addClass('active');
+    //html[0].className += ' active';
+    //console.log(html);
+  }
 
-    hook.append(html);
-    resetCarousel();
+  hook.append(html);
+  resetCarousel();
 }
 
 
 var iconMatch = {
-    "01d": "B",
-    "02d": "H",
-    "03d": "N",
-    "04d": "Y",
-    "09d": "Q",
-    "10d": "R",
-    "11d": "P",
-    "13d": "W",
-    "50d": "M",
-    "01n": "C",
-    "02n": "I",
-    "03n": "N",
-    "04n": "Y",
-    "09n": "Q",
-    "10n": "R",
-    "11n": "P",
-    "13n": "W",
-    "50n": "M"
+  "01d": "B",
+  "02d": "H",
+  "03d": "N",
+  "04d": "Y",
+  "09d": "Q",
+  "10d": "R",
+  "11d": "P",
+  "13d": "W",
+  "50d": "M",
+  "01n": "C",
+  "02n": "I",
+  "03n": "N",
+  "04n": "Y",
+  "09n": "Q",
+  "10n": "R",
+  "11n": "P",
+  "13n": "W",
+  "50n": "M"
 };
 
 function degToCompass(num) {
-    var val = Math.floor((num / 22.5) + 0.5);
-    var arr = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"];
-    return arr[(val % 16)];
+  var val = Math.floor((num / 22.5) + 0.5);
+  var arr = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"];
+  return arr[(val % 16)];
 }
 
 
@@ -100,33 +100,35 @@ var hideTime = new Date();
 
 function hideEverything() {
 
-    if (DEBUG) {
-        return;
-    }
+  if (DEBUG) {
+    return;
+  }
 
-    var main = $('div.main');
-    var now = new Date();
+  var main = $('div.main');
+  var now = new Date();
 
-    if (hideTime < now) {
-        $('div.main').hide(1000);
-        //$('div.main').attr('display', 'none !important');
-    } else {
-        var diff = hideTime - now;
-        setTimeout(hideEverything, diff);
-    }
+  if (hideTime < now) {
+    $('div.main').hide(1000);
+    //$('div.main').attr('display', 'none !important');
+  } else {
+    var diff = hideTime - now;
+    setTimeout(hideEverything, diff);
+  }
 }
 
-function putName(msgPeople){
+function putName(msgPeople) {
   if (msgPeople == "any") { // unknown person
     $('#hello').html('Hallo, Fremder.')
   } else { // known person
 
     // matching the personid to a person
-    if( msgPeople !== null && msgPeople instanceof Array){
+    if (msgPeople !== null && msgPeople instanceof Array) {
       msgPeople = [msgPeople];
     }
 
-    var names = msgPeople.map(function(x){ return people[x]; })
+    var names = msgPeople.map(function(x) {
+      return people[x];
+    })
     names = names.join(' und ');
 
     $('#hello').html('Hallo, ' + names + '.')
@@ -137,256 +139,118 @@ function putName(msgPeople){
 
 
 
- //########## init stuff #############
+//########## init stuff #############
 
 function init() {
 
-    //dynamic css
-    var cw = $('.main').height();
-    cw = cw / 16 * 9;
-    $('.main').css({'width':cw+'px'});
-    $('.main').css({'max-width':cw+'px'});
-
-
-    setTimeout(hideEverything, 1000);
-
-    startTime();
-
-    var socket = io('http://localhost:3000');
-
-/*
-    socket.on('train-news', function(msg) {
-        if (msg !== null && typeof msg !== 'object') {
-            msg = JSON.parse(msg);
-        }
-
-        var mod = $("div[type='trains'][from='" + msg.from + "'][to='" + msg.to + "']");
-
-        //  complete message?
-        //if( msg.to == "Frankfurt(Main)West" && msg.from == "Gießen Licher Str") {
-        // TODO ask for a real change!
-
-        var fillData = function() {
-            var newContent = new Array();
-
-            msg.data.forEach(function(e, i, a) {
-                newContent[i] = '<table><tbody>';
-
-                e.forEach(function(e1, i1, a1) {
-
-                    if (e.length >= 4 && i1 > 0 && i1 < e.length - 1) {
-
-                        newContent[i] += '<tr>';
-                        newContent[i] += '<td class="train-times"></td>';
-                        newContent[i] += '<td class="train-delay"> ... </td>';
-                        newContent[i] += '<td class="train-station"></td>';
-                        newContent[i] += '<tr>';
-
-                    } else e1.forEach(function(e2, i2, a2) {
-
-                        newContent[i] += '<tr>';
-                        newContent[i] += '<td class="train-times">' + e2['time'] + '</td>';
-                        newContent[i] += '<td class="train-delay">' + e2['delay'] + '</td>';
-                        newContent[i] += '<td class="train-station">' + e2['station'] + '</td>';
-                        newContent[i] += '<tr>';
-                    });
-
-                    newContent[i] += '<tr>';
-                    newContent[i] += '<td class="train-times"><div class="seperator line" ></div></td>';
-                    newContent[i] += '<tr>';
-                });
-
-                newContent[i] += '</tbody></table>';
-            });
-
-            var trainEles = ['.firstTrain', '.secondTrain']
-
-            trainEles.forEach(function(e, i, a) {
-                mod.find(e).empty();
-                mod.find(e).append(newContent[i]);
-            });
-
-            resetCarousel();
-        }
-
-
-        if (mod[0] === undefined) {
-            console.log('module unknown for trains: ' + msg.from + ',' + msg.to);
-
-            $.ajax({
-                url: "./html/trains-modul.html",
-                success: function(result) {
-
-                    result = replaceAll(result, "###1###", msg.from)
-                    result = replaceAll(result, "###2###", msg.to);
-
-
-                    appendModule(result);
-                    //getAppendParent().append(result)
-
-                    mod = $("div[type='trains'][from='" + msg.from + "'][to='" + msg.to + "']");
-                    mod.attr('latest', mod.hash);
-                    fillData();
-                }
-            });
-
-        } else if (mod.attr('latest') != mod.hash) {
-            console.log("new data, changing view");
-            mod.attr('latest', mod.hash);
-            fillData();
-        } else {
-          //nothing to change...
-        }
-    });
-    */
-
-    var PATH_TO_MODULE_LIST = "./modules/modules.json";
-
-    $.ajax({
-      url: PATH_TO_MODULE_LIST,
-      success: function(data) {
-          console.log(data); // Data returned
-
-          eval(data).forEach((m, i) => {
-              console.log(m);
-
-              $.ajax({
-                  url: "./modules/" + m + "/main.js",
-                  dataType: "text",
-                  success: function(result) {
-                      //console.log( mod_data ); // Data returned
-                    //  console.log(mod_data)
-                      //  eval(result)(socket);
-                  //      JSON.parse(result);
-                  var data = new Object();
-                  data.func = result;
-                  var jsonVal = JSON.stringify(data);
-                  var newObj = $.parseJSON(jsonVal);
-                  eval(newObj.func);
-                  main(socket);
-                  }
-              });
-          });
-      }
+  //dynamic css
+  var cw = $('.main').height();
+  cw = cw / 16 * 9;
+  $('.main').css({
+    'width': cw + 'px'
+  });
+  $('.main').css({
+    'max-width': cw + 'px'
   });
 
-    socket.on('weather-news', function(msg) {
 
-        if (msg !== null && typeof msg !== 'object') {
-            msg = JSON.parse(msg);
-        }
+  setTimeout(hideEverything, 1000);
 
-        var wIcon = $('#headWeatherIcon');
+  startTime();
 
-        if (wIcon.attr('latest') != msg.hash) {
-            var owmIcon = msg.data.weather[0].icon;
-            var temp = msg.data.main.temp;
-            wIcon.attr("data-icon", iconMatch[owmIcon]);
-            wIcon.attr('latest', msg.hash);
-            $('#headTemp').html(temp.toFixed(1));
-        }
-    });
+  var socket = io('http://localhost:3000');
 
-/*
-    socket.on('weather-forecast', function(msg) {
-        if (msg !== null && typeof msg !== 'object') {
-            msg = JSON.parse(msg);
-        }
+  var PATH_TO_MODULE_LIST = "./modules/modules.json";
 
-        var loc = msg.location.toUpperCase();
-        var dat = msg.data;
+  $.ajax({
+    url: PATH_TO_MODULE_LIST,
+    success: function(data) {
+      //console.log(data); // Data returned
 
-        var mod = $("div[type='weather-forecast'][location='" + loc + "']");
+      eval(data).forEach((m, i) => {
+        //console.log(m);
 
-        var fillData = function() {
-            for (i = 0; i < 3; i++) {
-                var submod = mod.find("div[order='" + i + "']")
-                var data = dat[i]
+        $.ajax({
+          url: "./modules/" + m + "/main.js",
+          dataType: "text",
+          success: function(result) {
 
-                submod.find("a.icon.forecast").attr("data-icon", iconMatch[data.weather[0].icon])
-                submod.find(".temp").html(data.main.temp.toFixed(1));
-                submod.find(".humi").html(data.main.humidity.toFixed(1) + "%");
-                submod.find(".wind").html(degToCompass(data.wind.deg));
+            // source: http://jsfiddle.net/rahilwazir/gfbAg/110/
+            var data = new Object();
+            data.func = result;
+            var jsonVal = JSON.stringify(data);
+            var newObj = $.parseJSON(jsonVal);
+            eval(newObj.func);
+            main(socket);
+          }
+        });
+      });
+    }
+  });
 
-                var today = new Date(data.dt * 1000);
-                var wd = today.getDay();
+  socket.on('weather-news', function(msg) {
 
-                submod.find(".wd").html(days[wd]);
-                resetCarousel();
-            }
-        }
+    if (msg !== null && typeof msg !== 'object') {
+      msg = JSON.parse(msg);
+    }
 
-        if (mod[0] === undefined) {
-            console.log('module unknown for weather-forecast: ' + loc);
+    var wIcon = $('#headWeatherIcon');
 
-            $.ajax({
-                url: "./html/weather-forecast-modul.html",
-                success: function(result) {
+    if (wIcon.attr('latest') != msg.hash) {
+      var owmIcon = msg.data.weather[0].icon;
+      var temp = msg.data.main.temp;
+      wIcon.attr("data-icon", iconMatch[owmIcon]);
+      wIcon.attr('latest', msg.hash);
+      $('#headTemp').html(temp.toFixed(1));
+    }
+  });
 
-                    result = result.replace("###1###", loc).replace("###2###", loc);
 
-                    //getAppendParent().append(result)
-                    appendModule(result);
+  socket.on('faces', function(msg) {
+    if (msg !== null && typeof msg !== 'object') {
+      msg = JSON.parse(msg);
+    }
 
-                    mod = $("div[type='weather-forecast'][location='" + loc + "']");
-                    mod.attr('latest', mod.hash);
-                    fillData();
-                }
-            });
+    //{"found" : true, "person": "any"}
 
-        } else if (mod.attr('latest') != mod.hash) {
-            console.log("new data, changing view");
-            mod.attr('latest', mod.hash);
-            fillData();
-        } else {
-            // nothing to change...
-        }
-    });*/
+    if (msg.found) {
 
-    socket.on('faces', function(msg) {
-        if (msg !== null && typeof msg !== 'object') {
-            msg = JSON.parse(msg);
-        }
+      putName(msg.person);
 
-        //{"found" : true, "person": "any"}
+      // show the ui
+      $('div.main').show(1000);
 
-        if (msg.found) {
+      var newDateObj = new Date(new Date().getTime() + hideInterval);
+      hideTime = newDateObj;
 
-            putName(msg.person);
-
-            // show the ui
-            $('div.main').show(1000);
-
-            var newDateObj = new Date(new Date().getTime() + hideInterval);
-            hideTime = newDateObj;
-
-            setTimeout(hideEverything, hideInterval);
-        }
-    });
+      setTimeout(hideEverything, hideInterval);
+    }
+  });
 }
 
 // ############ Carousel #############
 
-function scroll(){
+function scroll() {
+  //TODO skip more, if invisible objects are ahead
   $('.jcarousel').jcarousel('scroll', '+=1');
   setTimeout(scroll, scrollInterval);
 }
 
-function initCarousel(){
+function initCarousel() {
   var jcarousel = $('.jcarousel');
   jcarousel.jcarousel({
-          wrap: 'circular',
-          vertical: true
-      })
+    wrap: 'circular',
+    vertical: true
+  })
   scroll();
 }
 
-function resetCarousel(){
+function resetCarousel() {
   $('.jcarousel').jcarousel('reload');
 }
 
 (function($) {
-    $(function() {
-        initCarousel()
-    });
+  $(function() {
+    initCarousel()
+  });
 })(jQuery);
