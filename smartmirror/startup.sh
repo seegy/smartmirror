@@ -1,6 +1,18 @@
 #!/bin/bash
 
-here=$(dirname "$0")
+here=$(pwd)/$(dirname "$0")
+
+
+## install
+
+cd $here/webserver/
+npm install
+
+cd $here/../stuff/data-crawler/
+sh install.sh
+
+
+## start
 
 cd $here/../stuff/data-crawler/
 nohup sh jvm-start.sh &
@@ -9,5 +21,4 @@ cd $here/../stuff/scripts/
 python face-detect.py &
 
 cd $here/webserver/
-npm install $here/webserver/
 nohup npm start &
