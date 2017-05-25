@@ -5,7 +5,7 @@ const locals = {/* ...*/};
 const pug = require('electron-pug')({pretty: true}, locals);
 const electron = require('electron');
 const dialog = electron.dialog;
-
+const DEBUG = false;
 // Standard stuff
 
 var server = require('http').createServer();
@@ -22,7 +22,10 @@ function createWindow() {
 
   win.loadURL(`file://${__dirname}/../views/index.pug`);
 
-  win.webContents.openDevTools()
+  if(DEBUG){
+    win.webContents.openDevTools()
+  }
+
   win.setMenuBarVisibility(false);
 
   // Emitted when the window is closed.
