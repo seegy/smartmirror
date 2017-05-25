@@ -120,7 +120,7 @@ if __name__ == "__main__":
                 r.publish(channel, '{"found" : true, "person": ' + str(ids) + '}')
 
             os.remove(image_file)
-            sleep(0.1)
+            sleep(1)
 
         else:
             print "no recognizer found."

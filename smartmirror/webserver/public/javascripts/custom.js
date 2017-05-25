@@ -1,6 +1,6 @@
 var DEBUG = false;
 var scrollInterval = 5000; // ms
-var hideInterval = 5000;
+var hideInterval = 6000;
 
 var people = {
   1: "S&ouml;ren",
