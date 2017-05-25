@@ -24,10 +24,16 @@ recognizer = cv2.face.createLBPHFaceRecognizer()
 update = False
 basewidth = 300 #TODO ?
 
-face_max_pixels= 52
+face_max_pixels= 80
 detect_min_pixels= face_max_pixels
 
 show_windows=True
+
+
+def resize_image(inner_face):
+    h= np.size(inner_face, 0)
+    return scipy.misc.imresize(inner_face, ( (0. + face_max_pixels) / h ))
+
 
 def really_a_face (inner_face):
 
@@ -42,7 +48,7 @@ def really_a_face (inner_face):
                 for (ex,ey,ew,eh) in eyes[:2]:
                     cv2.rectangle(inner_face,(ex,ey),(ex+ew,ey+eh),(255,0,0),2)
 
-                cv2.imshow("Adding faces to traning set...", inner_face)
+                cv2.imshow("Adding faces to traning set...", resize_image(inner_face))
                 cv2.waitKey(5)
 
             return True
@@ -91,7 +97,7 @@ def train_pictures(image_paths, nbr, skipCheck):
                 inner_face= image[y: y + h, x: x + w]
 
                 if really_a_face(inner_face):
-                    resized= scipy.misc.imresize(inner_face, ( (0. + face_max_pixels) / h ))
+                    resized= resize_image(inner_face)
                     images.append(resized)
                     labels.append(nbr)
                     #print "{} {} {} {} {}: Adding faces to traning set for {}...".format(image_path, y, h, x, w, nbr)
@@ -104,10 +110,6 @@ def train_pictures(image_paths, nbr, skipCheck):
         recognizer.train(images, np.array(labels))
 
     return images, labels
-
-
-
-
 
 
 

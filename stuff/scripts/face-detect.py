@@ -5,16 +5,23 @@ from time import sleep, gmtime, strftime
 import cv2, picamera, os, threading, logging, time, ConfigParser
 import numpy as np
 from PIL import Image
-from kafka import KafkaProducer
 import scipy.ndimage
+import redis
 
 
 Config = ConfigParser.ConfigParser()
 Config.read('./config.ini')
 
-kafkaHost = Config.get('Kafka', 'host')
-kafkaPort = Config.get('Kafka', 'port')
-topic = Config.get('face-producer', 'topic')
+
+config = {
+    'host': Config.get('Redis', 'host'),
+    'port': Config.get('Redis', 'port'),
+    'db': Config.get('Redis', 'db'),
+}
+
+r = redis.StrictRedis(**config)
+
+channel = Config.get('face-producer', 'channel')
 
 recognizerFile= '/home/pi/facedetect/generated.rec'
 
@@ -34,10 +41,16 @@ show_windows=False
 
 
 prediction_lower_limit = 80.
-prediction_upper_limit = 100.
+prediction_upper_limit = 120.
 
-face_max_pixels= 52
+face_max_pixels= 80
 detect_min_pixels= face_max_pixels
+
+def resize_image(inner_face):
+    h= np.size(inner_face, 0)
+    return scipy.misc.imresize(inner_face, ( (0. + face_max_pixels) / h ))
+
+
 
 def really_a_face (inner_face):
 
@@ -72,7 +85,7 @@ def check_image(new_image):
         inner_face= predict_image[y: y + h, x: x + w]
 
         if really_a_face(inner_face):
-            resized= scipy.misc.imresize(inner_face, ( (0. + face_max_pixels ) / h ))
+            resized= resize_image(inner_face)
             nbr_predicted, conf = recognizer.predict(resized)
             print "nbr: {}, conf: {}".format(nbr_predicted, conf)
 
@@ -95,7 +108,6 @@ if __name__ == "__main__":
         recognizer.load(recognizerFile)
 
         cam = picamera.PiCamera()
-        producer = KafkaProducer(bootstrap_servers=kafkaHost+':'+kafkaPort)
 
         while True:
             image_file = '/tmp/face-detect.jpg'
@@ -105,7 +117,7 @@ if __name__ == "__main__":
 
             if ids :
                 print( strftime("%Y-%m-%d %H:%M:%S", gmtime()) + ': found a face! {}'.format(ids))
-                producer.send(topic, '{"found" : true, "person": ' + str(ids) + '}')
+                r.publish(channel, '{"found" : true, "person": ' + str(ids) + '}')
 
             os.remove(image_file)
             sleep(0.1)

@@ -11,5 +11,6 @@
                  [hickory "0.7.0"]
                  [clj-http "2.3.0"]
                  [clj-time "0.13.0"]
-                 [org.clojure/data.json "0.2.6"]]
+                 [org.clojure/data.json "0.2.6"]
+                 [google-apps-clj "0.6.1"]]
     :main data_crawler.core)
