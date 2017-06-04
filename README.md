@@ -51,4 +51,4 @@ sh startup.sh
 + Use Redis data store to gather user profiles for interests. So the mirror should match a face to a profile and decides, which train connections or weather reports will be shown.
 + Interface for 'mirror admins' to create easily new profiles (via APP or Webservice).
 + GUI Module and data deliverer for Google Calendar
-+ ansible script for installation
++ ansible script for role-based installation
