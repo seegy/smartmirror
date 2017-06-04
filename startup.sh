@@ -5,20 +5,20 @@ here=$(pwd)/$(dirname "$0")
 
 ## install
 
-cd $here/webserver/
+cd $here/gui-server/
 npm install
 
-cd $here/../stuff/data-crawler/
+cd $here/data-crawler/
 sh install.sh
 
 
 ## start
 
-cd $here/../stuff/data-crawler/
+cd $here/data-crawler/
 nohup sh jvm-start.sh &
 
-cd $here/../stuff/scripts/
+cd $here/scripts/
 nohup python face-detect.py &
 
-cd $here/webserver/
+cd $here/gui-server/
 nohup npm start &

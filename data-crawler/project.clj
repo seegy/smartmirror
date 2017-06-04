@@ -13,4 +13,6 @@
                  [clj-time "0.13.0"]
                  [org.clojure/data.json "0.2.6"]
                  [google-apps-clj "0.6.1"]]
-    :main data_crawler.core)
+    :main data_crawler.core
+    :target-path "target/"
+    :uberjar-name "data-crawler-standalone.jar")
