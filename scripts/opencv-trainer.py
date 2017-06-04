@@ -155,4 +155,4 @@ if __name__ == "__main__":
         recognizer.save(recognizerFile)
 
     else:
-        print "useage: <script> <nbr> <file/dir>"
+        print "usage: <script> <nbr> <file/dir>"
