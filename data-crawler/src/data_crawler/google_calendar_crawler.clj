@@ -13,4 +13,3 @@
   (list-day-events creds "2017-04-21" "+02"))
 
 
-;4/rgm34khpuH2JeVIKUrdEbxysdqKaprXi2V6ap3-Ggqg

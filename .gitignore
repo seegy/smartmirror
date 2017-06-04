@@ -82,3 +82,5 @@ config.clj
 .idea/*
 stuff/docker/*
 nohup.out
+
+data-crawler/resources/google-creds.edn
