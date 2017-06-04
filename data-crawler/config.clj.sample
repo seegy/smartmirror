@@ -1,0 +1,24 @@
+{
+  :train {
+
+           :topic "train-news"
+           :pullInterval 30000
+           :pushInterval 30000
+           :connections #{
+             {:from "Berlin" :to "Hamburg" :url "https://reiseauskunft.bahn.de/bin/query.exe/dn?revia=yes&existOptimizePrice=1&country=DEU&dbkanal_007=L01_S01_D001_KIN0001_qf-bahn-svb-kl2_lz03&start=1&REQ0JourneyStopsS0A=1&S=Berlin+Hbf&REQ0JourneyStopsSID=A%3D1%40O%3DBerlin+Hbf%40X%3D13369549%40Y%3D52525589%40U%3D80%40L%3D008011160%40B%3D1%40p%3D1495548342%40&Z=Hamburg+Hbf&REQ0JourneyStopsZID=&date=So%2C+04.06.17&time=21%3A59&timesel=depart&returnDate=&returnTime=&returnTimesel=depart&optimize=0&auskunft_travelers_number=1&tariffTravellerType.1=E&tariffTravellerReductionClass.1=0&tariffClass=2&rtMode=DB-HYBRID&externRequest=yes&HWAI=JS%21js%3Dyes%21ajax%3Dyes%21" }
+             }
+           }
+  :redis {
+           :host "127.0.0.1"
+           :port 6379
+           }
+  :weather {
+             :topic "weather-news"
+             :forecast-topic "weather-forecast"
+             :pullInterval 1200000
+             :pushInterval 50000
+             :apiKey "YOUR OWM API KEY"
+             :hometown "Berlin"
+             :cities ["Berlin" "Hamburg" ]
+             }
+  }
