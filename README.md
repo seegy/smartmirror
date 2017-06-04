@@ -5,7 +5,7 @@ This repository works as gathering for a smart/magic mirror applications based o
 
 ## Architecture
 
-Currently, there are three types of components: data deliverer, processer and consumer. Deliverer are tools that grab data from the internet or via GPIO (Data-Crawler ```data-crawler```, Raspberry Cam Script ```scritps/face-detect.py```). 
+Currently, there are three types of components: data deliverer, processer and consumer. Deliverer are tools that grab data from the internet or via GPIO (Data-Crawler ```data-crawler```, Raspberry Cam Script ```scripts/face-detect.py```). 
 
 As processer is Redis in use. The pubsub system is in use for the deliverer to send their data typeless to the consumers.
 
@@ -21,8 +21,8 @@ There is currently one consumer in the architecture. The GUI-Server takes messag
 ### Also in this repository
 OpenCV is in use for face detection and recognation. So there are two scripts to train a recognation model:
 
-+ ```scritps/opencv-trainer.py``` a script that takes a picture or a folder of pictures and an ID of a person to train (and create if nessessary) the recognation model.
-+ ```scritps/live_train_face.py``` as script that use the RaspberryPi camera to take live pictures to train the recognation model for a person.
++ ```scripts/opencv-trainer.py``` a script that takes a picture or a folder of pictures and an ID of a person to train (and create if nessessary) the recognation model.
++ ```scripts/live_train_face.py``` as script that use the RaspberryPi camera to take live pictures to train the recognation model for a person.
 
 
 ## Install introductions
@@ -35,7 +35,14 @@ For the installation, you need just one (better two) RaspberryPi with internet c
 + [NodeJS](https://nodejs.org/en/)
 
 
-```
+
+```shell
+# create config file
+cp data-crawler/config.clj.sample data-crawler/config.clj
+# customize configs
+vi data-crawler/config.clj 
+
+# start environment
 sh startup.sh
 ```
 
