@@ -1,6 +1,6 @@
 # Raspberry Smartmirror
 
-This repository works as gathering for a smart/magic mirror applications based on the [RaspberryPie Model 3](https://www.raspberrypi.org/products/raspberry-pi-3-model-b/). Every single IOP application, mostly Python scripts, are working as an autonomous cell and delivers its informations to one local Redis. Subsricers, such as monitors or output applications, get their data basically from Redis and process them by their own.
+This repository works as gathering for a smart/magic mirror applications based on the [RaspberryPi Model 3](https://www.raspberrypi.org/products/raspberry-pi-3-model-b/). Every single IOP application, mostly Python scripts, are working as an autonomous cell and delivers its informations to one local Redis. Subsricers, such as monitors or output applications, get their data basically from Redis and process them by their own.
 
 
 ## Architecture
@@ -11,6 +11,13 @@ As processer is Redis in use. The pubsub system is in use for the deliverer to s
 
 There is currently one consumer in the architecture. The GUI-Server takes messages from Redis PubSub and pushes them onto the GUI.
 
+### Components
+
++ ```data-crawler``` clojure application to gather data (weather, train, ...) and push it into redis pubsub
++ ```face-detect``` a python script that uses the RaspberryPi camera and tries to recognize kown face. In case of found, it pushes a massage into Redis.
++ ```redis``` no custom system. Just a plain redis.
++ ```GUI-Server``` a NodeJS application with [electron](https://electron.atom.io/) GUI.
+
 ### Also in this repository
 OpenCV is in use for face detection and recognation. So there are two scripts to train a recognation model:
 
@@ -20,7 +27,7 @@ OpenCV is in use for face detection and recognation. So there are two scripts to
 
 ## Install introductions
 
-For the installation, you need just one (better two) RaspberryPie with internet connection. Following components should be installed:
+For the installation, you need just one (better two) RaspberryPi with internet connection. Following components should be installed:
 
 + [Redis](http://mjavery.blogspot.de/2016/05/setting-up-redis-on-raspberry-pi.html)
 + [OpenCV](http://www.pyimagesearch.com/2016/04/18/install-guide-raspberry-pi-3-raspbian-jessie-opencv-3/)
