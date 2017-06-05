@@ -46,6 +46,27 @@ vi data-crawler/config.clj
 sh startup.sh
 ```
 
+### Optional
+
+
+#### No screen blanking on GUI server
+
+Change two lines in ```/etc/kbd/config```:
+
++ ```BLANK_TIME=0``` (was 30)
++ ```POWERDOWN_TIME=0``` (was 15)
+
+Insert one line in ```/etc/lightdm/lightdm.conf``` under ```[SeatDefault]```:
+
++ ```xserver-command=X -s 0 dpms```
+
+
+#### Hide mouse curser on GUI server
+
+```shell
+sudo apt-get install unclutter
+# add 'unclutter -display :0 -noevents -grab &' into /etc/rc.local 
+```
 
 ## TODOs
 + Use Redis data store to gather user profiles for interests. So the mirror should match a face to a profile and decides, which train connections or weather reports will be shown.

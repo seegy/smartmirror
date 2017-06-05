@@ -159,7 +159,7 @@ td.train-station {
 	font-family: 'MeteoconsRegular';
 	content: attr(data-icon);
   font-size: 120%;
-  margin-left: -1vh;
+  margin-left: 0;
 }
 .margin-forecast {
     margin-top: 15%;
