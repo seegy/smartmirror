@@ -84,3 +84,6 @@ stuff/docker/*
 nohup.out
 
 data-crawler/resources/google-creds.edn
+
+#python
+*.pyc
