@@ -1,4 +1,4 @@
-#!/usr/bin/python2.7
+#!/usr/bin/env python
 
 import sys
 import cv2, picamera, os, threading, logging, time, ConfigParser
