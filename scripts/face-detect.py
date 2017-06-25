@@ -57,8 +57,9 @@ def check_motion(old_image, new_image):
     size_y=len(old_image[0])
     sense_cap= size_x * size_y * sensitivity * check_percentage
 
-    for x in xrange(0, size_x - 1, int(1/ check_percentage)):
-        for y in xrange(0, size_y - 1, int(1 / check_percentage)):
+    # TODO Check if this is still backward compatible to python 2
+    for x in range(0, size_x - 1, int(1/ check_percentage)):
+        for y in range(0, size_y - 1, int(1 / check_percentage)):
             diff= abs(old_image[x,y] - new_image[x,y])
             if diff >= threshold:
                 changed += 1
