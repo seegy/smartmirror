@@ -1,7 +1,7 @@
     #!/usr/bin/env python
 
     import sys
-    import cv2, os, threading, logging, time, ConfigParser
+    import cv2, os, threading, logging, time
     import glob
     from face_helper import Face_Helper
 

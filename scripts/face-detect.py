@@ -3,12 +3,17 @@
 import sys
 from time import sleep, gmtime, strftime
 import picamera
-import ConfigParser
 import redis
 from face_helper import Face_Helper
 from io import BytesIO
 from PIL import Image
 import numpy as np
+
+# In Python 3, ConfigParser has been renamed to configparser for PEP 8 compliance
+try:
+    import ConfigParser
+except ImportError:
+    import configparser as ConfigParser
 
 
 Config = ConfigParser.ConfigParser()
