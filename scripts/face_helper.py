@@ -81,7 +81,7 @@ class Face_Helper:
             if self.really_a_face(inner_face):
                 resized= self.resize_image(inner_face)
                 nbr_predicted, conf = self.recognizer.predict(resized)
-                print "nbr: {}, conf: {}".format(nbr_predicted, conf)
+                print("nbr: {}, conf: {}".format(nbr_predicted, conf))
 
                 if self.prediction_lower_limit <= conf <= self.prediction_upper_limit:
                     nbrs.append(nbr_predicted)
@@ -111,7 +111,7 @@ class Face_Helper:
             if skipCheck:
                 images.append(image)
                 labels.append(nbr)
-                print "{}: Adding faces to traning set for {}...".format(image_path, nbr)
+                print("{}: Adding faces to traning set for {}...".format(image_path, nbr))
 
             else:
                 # Detect the face in the image
@@ -127,7 +127,7 @@ class Face_Helper:
                         labels.append(nbr)
                         #print "{} {} {} {} {}: Adding faces to traning set for {}...".format(image_path, y, h, x, w, nbr)
 
-        print "Add {} samples to id {}.".format(len(labels), nbr)
+        print("Add {} samples to id {}.".format(len(labels), nbr))
         # return the images list and labels list
         if os.path.exists(self.recognizerFile):
             self.recognizer.update(images, np.array(labels))
