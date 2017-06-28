@@ -5,7 +5,10 @@ import numpy as np
 from PIL import Image
 import scipy.ndimage
 import matplotlib.image as mpimg
+import ConfigParser
 
+Config = ConfigParser.ConfigParser()
+Config.read('./config.ini')
 
 class Face_Helper:
 
@@ -15,9 +18,9 @@ class Face_Helper:
         self.recognizerDir= '/home/pi/facedetect/'
         self.recognizerFile= self.recognizerDir + 'generated.rec'
 
-        cascade_path = '/home/pi/opencv-3.0.0/data/haarcascades/haarcascade_frontalface_default.xml'
-        eyes_path= '/home/pi/opencv-3.0.0/data/haarcascades/haarcascade_eye.xml'
-        noses_path= '/home/pi/opencv-3.0.0/data/haarcascades/Nariz.xml'
+        cascade_path = Config.get('OpenCV', 'cascade_path')
+        eyes_path= Config.get('OpenCV', 'eyes_path')
+        noses_path= Config.get('OpenCV', 'noses_path')
 
         self.face_cascade = cv2.CascadeClassifier(cascade_path)
         self.eye_cascade = cv2.CascadeClassifier(eyes_path)
