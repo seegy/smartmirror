@@ -1,14 +1,19 @@
-#!/usr/bin/python2.7
+#!/usr/bin/env python
 
 import sys
 from time import sleep, gmtime, strftime
 import picamera
-import ConfigParser
 import redis
 from face_helper import Face_Helper
 from io import BytesIO
 from PIL import Image
 import numpy as np
+
+# In Python 3, ConfigParser has been renamed to configparser for PEP 8 compliance
+try:
+    import ConfigParser
+except ImportError:
+    import configparser as ConfigParser
 
 
 Config = ConfigParser.ConfigParser()
@@ -52,8 +57,9 @@ def check_motion(old_image, new_image):
     size_y=len(old_image[0])
     sense_cap= size_x * size_y * sensitivity * check_percentage
 
-    for x in xrange(0, size_x - 1, int(1/ check_percentage)):
-        for y in xrange(0, size_y - 1, int(1 / check_percentage)):
+    # TODO Check if this is still backward compatible to python 2
+    for x in range(0, size_x - 1, int(1/ check_percentage)):
+        for y in range(0, size_y - 1, int(1 / check_percentage)):
             diff= abs(old_image[x,y] - new_image[x,y])
             if diff >= threshold:
                 changed += 1

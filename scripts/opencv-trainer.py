@@ -1,7 +1,7 @@
-    #!/usr/bin/python2.7
+    #!/usr/bin/env python
 
     import sys
-    import cv2, os, threading, logging, time, ConfigParser
+    import cv2, os, threading, logging, time
     import glob
     from face_helper import Face_Helper
 
@@ -36,9 +36,9 @@
                     fh.train_pictures(file_list, int(nbr), skipCheck)
 
                 else:
-                    print "file not found"
+                    print("file not found")
 
             fh.save()
 
         else:
-            print "usage: <script> <nbr> <file/dir>"
+            print("usage: <script> <nbr> <file/dir>")
