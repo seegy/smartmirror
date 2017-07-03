@@ -31,7 +31,7 @@ channel = Config.get('face-producer', 'channel')
 fh = Face_Helper()
 show_windows=False
 cam = picamera.PiCamera()
-
+cam.rotation = Config.get('Camera', 'rotation')
 
 # how many percent of pixel will be checked
 check_percentage = 0.05
