@@ -5,10 +5,17 @@ import numpy as np
 from PIL import Image
 import scipy.ndimage
 import matplotlib.image as mpimg
-import ConfigParser
+
+# In Python 3, ConfigParser has been renamed to configparser for PEP 8 compliance
+try:
+    import ConfigParser
+except ImportError:
+    import configparser as ConfigParser
+
 
 Config = ConfigParser.ConfigParser()
 Config.read('./config.ini')
+
 
 class Face_Helper:
 
