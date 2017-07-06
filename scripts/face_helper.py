@@ -1,10 +1,20 @@
-#!/usr/bin/python2.7
+#!/usr/bin/env python
 
 import cv2, os
 import numpy as np
 from PIL import Image
 import scipy.ndimage
 import matplotlib.image as mpimg
+
+# In Python 3, ConfigParser has been renamed to configparser for PEP 8 compliance
+try:
+    import ConfigParser
+except ImportError:
+    import configparser as ConfigParser
+
+
+Config = ConfigParser.ConfigParser()
+Config.read('./config.ini')
 
 
 class Face_Helper:
@@ -15,9 +25,9 @@ class Face_Helper:
         self.recognizerDir= '/home/pi/facedetect/'
         self.recognizerFile= self.recognizerDir + 'generated.rec'
 
-        cascade_path = '/home/pi/opencv-3.0.0/data/haarcascades/haarcascade_frontalface_default.xml'
-        eyes_path= '/home/pi/opencv-3.0.0/data/haarcascades/haarcascade_eye.xml'
-        noses_path= '/home/pi/opencv-3.0.0/data/haarcascades/Nariz.xml'
+        cascade_path = Config.get('OpenCV', 'cascade_path')
+        eyes_path= Config.get('OpenCV', 'eyes_path')
+        noses_path= Config.get('OpenCV', 'noses_path')
 
         self.face_cascade = cv2.CascadeClassifier(cascade_path)
         self.eye_cascade = cv2.CascadeClassifier(eyes_path)
@@ -81,7 +91,7 @@ class Face_Helper:
             if self.really_a_face(inner_face):
                 resized= self.resize_image(inner_face)
                 nbr_predicted, conf = self.recognizer.predict(resized)
-                print "nbr: {}, conf: {}".format(nbr_predicted, conf)
+                print("nbr: {}, conf: {}".format(nbr_predicted, conf))
 
                 if self.prediction_lower_limit <= conf <= self.prediction_upper_limit:
                     nbrs.append(nbr_predicted)
@@ -111,7 +121,7 @@ class Face_Helper:
             if skipCheck:
                 images.append(image)
                 labels.append(nbr)
-                print "{}: Adding faces to traning set for {}...".format(image_path, nbr)
+                print("{}: Adding faces to traning set for {}...".format(image_path, nbr))
 
             else:
                 # Detect the face in the image
@@ -127,7 +137,7 @@ class Face_Helper:
                         labels.append(nbr)
                         #print "{} {} {} {} {}: Adding faces to traning set for {}...".format(image_path, y, h, x, w, nbr)
 
-        print "Add {} samples to id {}.".format(len(labels), nbr)
+        print("Add {} samples to id {}.".format(len(labels), nbr))
         # return the images list and labels list
         if os.path.exists(self.recognizerFile):
             self.recognizer.update(images, np.array(labels))

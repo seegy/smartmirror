@@ -1,14 +1,22 @@
-#!/usr/bin/python2.7
+#!/usr/bin/env python
 
 import sys
-import cv2, picamera, os, threading, logging, time, ConfigParser
+import cv2, picamera, os, threading, logging, time
 from PIL import Image
 import numpy as np
 from io import BytesIO
 from face_helper import Face_Helper
 
-fh = Face_Helper()
+# In Python 3, ConfigParser has been renamed to configparser for PEP 8 compliance
+try:
+    import ConfigParser
+except ImportError:
+    import configparser as ConfigParser
 
+
+Config = ConfigParser.ConfigParser()
+Config.read('./config.ini')
+fh = Face_Helper()
 
 
 def find_a_face(image):
@@ -39,11 +47,12 @@ if __name__ == "__main__":
             os.makedirs(path)
 
         cam = picamera.PiCamera()
+        cam.rotation = Config.get('Camera', 'rotation')
 
         MAX_PICS = 100
 
         i=0
-        print "say Cheesee!"
+        print("say Cheesee!")
         while i < MAX_PICS:
             stream = BytesIO()
             cam.capture(stream, format='jpeg')
@@ -57,9 +66,9 @@ if __name__ == "__main__":
                 img = Image.fromarray(face)
                 imgPath = os.path.join(path, str(ts) + ".jpg")
                 img.save(imgPath)
-                print 'ok! ('+imgPath+')'
+                print('ok! ('+imgPath+')')
                 fh.train_pictures([imgPath], int(id), True)
-                print "say Cheesee!"
+                print("say Cheesee!")
                 i= i+1
 
            # sleep(0.01)
