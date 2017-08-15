@@ -90,3 +90,4 @@ data-crawler/resources/google-creds.edn
 
 # Configuration files
 scripts/config.ini
+gui-server/config/globalconf.json
