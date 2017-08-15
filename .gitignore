@@ -87,3 +87,6 @@ data-crawler/resources/google-creds.edn
 
 #python
 *.pyc
+
+# Configuration files
+scripts/config.ini
