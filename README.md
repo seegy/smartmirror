@@ -37,10 +37,20 @@ For the installation, you need just one (better two) RaspberryPi with internet c
 
 
 ```shell
-# create config file
+# create data-crawler configuration
 cp data-crawler/config.clj.sample data-crawler/config.clj
-# customize configs
-vi data-crawler/config.clj 
+# customize configuration
+vi data-crawler/config.clj
+
+# create python script configuration
+cp scripts/config.ini.sample scripts/config.ini
+# customize configuration (if necessary)
+vi scripts/config.ini
+
+# create gui-server configuration
+cp gui-server/config/globalconf.json.sample gui-server/globalconf.json
+# customize configuration (if necessary)
+vi gui-server/config/globalconf.json
 
 # start environment
 sh startup.sh
