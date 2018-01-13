@@ -83,7 +83,10 @@ config.clj
 stuff/docker/*
 nohup.out
 
+# private / sensible stuff
 data-crawler/resources/google-creds.edn
+scripts/conf/profiles.yml
+
 
 #python
 *.pyc

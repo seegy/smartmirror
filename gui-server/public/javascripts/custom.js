@@ -109,7 +109,8 @@ function hideEverything() {
   var now = new Date();
 
   if (hideTime < now) {
-    $('div.main').hide(1000);
+    stopCarousel()
+    $('div.main').hide(500);
     //$('div.main').attr('display', 'none !important');
   } else {
     var diff = hideTime - now;
@@ -138,23 +139,26 @@ function putName(msgPeople) {
 }
 
 
+function setWidth(){
+  //dynamic css
+  let calculatedWidth = $('.main').height() / 16 * 9;
+
+  $('.main').css({
+    'width': calculatedWidth + 'px'
+  });
+  $('.main').css({
+    'max-width': calculatedWidth + 'px'
+  });
+}
+
+
 
 
 //########## init stuff #############
 
 function init() {
 
-  //dynamic css
-  var cw = $('.main').height();
-  cw = cw / 16 * 9;
-  $('.main').css({
-    'width': cw + 'px'
-  });
-  $('.main').css({
-    'max-width': cw + 'px'
-  });
-
-
+  setWidth();
   setTimeout(hideEverything, 1000);
 
   startTime();
@@ -219,7 +223,9 @@ function init() {
       putName(msg.person);
 
       // show the ui
-      $('div.main').show(1000);
+      setWidth();
+      $('div.main').show(500);
+      resetCarousel();
 
       var newDateObj = new Date(new Date().getTime() + hideInterval);
       hideTime = newDateObj;
@@ -229,12 +235,17 @@ function init() {
   });
 }
 
+
 // ############ Carousel #############
+
+let carouselEnabled = false;
 
 function scroll() {
   //TODO skip more, if invisible objects are ahead
-  $('.jcarousel').jcarousel('scroll', '+=1');
-  setTimeout(scroll, scrollInterval);
+  if (carouselEnabled) {
+    $('.jcarousel').jcarousel('scroll', '+=1');
+    setTimeout(scroll, scrollInterval);
+  }
 }
 
 function initCarousel() {
@@ -243,12 +254,21 @@ function initCarousel() {
     wrap: 'circular',
     vertical: true
   })
+  carouselEnabled = true;
   scroll();
 }
 
 function resetCarousel() {
+  stopCarousel()
   $('.jcarousel').jcarousel('reload');
+  carouselEnabled = true;
+  scroll();
 }
+
+function stopCarousel(){
+  carouselEnabled = false;
+}
+
 
 (function($) {
   $(function() {

@@ -5,7 +5,7 @@ const locals = {/* ...*/};
 const pug = require('electron-pug')({pretty: true}, locals);
 const electron = require('electron');
 const dialog = electron.dialog;
-const DEBUG = false;
+const DEBUG = true;
 // Standard stuff
 
 var server = require('http').createServer();
