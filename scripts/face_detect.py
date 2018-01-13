@@ -2,17 +2,30 @@
 
 import sys
 from time import sleep, gmtime, strftime
-import picamera
 import ConfigParser
 import redis
 from face_helper import Face_Helper
 from io import BytesIO
 from PIL import Image
 import numpy as np
+import argparse
+
+
+from scipy.misc import imread
+from scipy.linalg import norm
+from scipy import sum, average
+
+
+parser = argparse.ArgumentParser(description='face detection application. requires Redis!')
+
+parser.add_argument('--show_delta', action="store_true", help='Shows the movement delta image')
+parser.add_argument('--show_detection', action="store_true", help='Shows detected faces.')
+parser.add_argument('--show_cam', action="store_true", help='Shows cam snapshot.')
+parser.add_argument('--show_all', action="store_true", help='Shows all')
 
 
 Config = ConfigParser.ConfigParser()
-Config.read('./config.ini')
+Config.read('./conf/config.ini')
 
 
 config = {
@@ -24,65 +37,80 @@ config = {
 r = redis.StrictRedis(**config)
 channel = Config.get('face-producer', 'channel')
 fh = Face_Helper()
-show_windows=False
-cam = picamera.PiCamera()
+
+args = None
+
+# TODO
+#import picamera
+#cam = picamera.PiCamera()
 
 
-# how many percent of pixel will be checked
-check_percentage = 0.05
 # how much must a pixel has to change the be marked as "changed"
-threshold = 5
-# how many percent of pixels in the image must marked as "changed" to declare a motion
-sensitivity = 0.02
+threshold = 10000
 # how many times takes the checker without any motion a face in front of the cam for possible
 person_timeout_limit= 10
+aperture_time = 0.15
+
+import cv2
 
 
 def get_image():
-    stream = BytesIO()
-    cam.capture(stream, format='jpeg')
-    stream.seek(0)
-    return np.array(Image.open(stream).convert('L'), 'uint8')
+
+    cap = cv2.VideoCapture(0)
+    result = None
+    sleep(aperture_time)
+    ret, frame = cap.read()
+    cap.release()
+
+    if ret:
+        result = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        #result = frame
+
+    return result
+
 
 
 def check_motion(old_image, new_image):
 
-    changed=0
-    size_x=len(old_image)
-    size_y=len(old_image[0])
-    sense_cap= size_x * size_y * sensitivity * check_percentage
+    frameDelta = cv2.absdiff(old_image, new_image)
+    thresh = cv2.threshold(frameDelta, 25, 255, cv2.THRESH_BINARY)[1]
+    #thresh = cv2.dilate(thresh, None, iterations=2)
 
-    for x in xrange(0, size_x - 1, int(1/ check_percentage)):
-        for y in xrange(0, size_y - 1, int(1 / check_percentage)):
-            diff= abs(old_image[x,y] - new_image[x,y])
-            if diff >= threshold:
-                changed += 1
+    white_count = cv2.countNonZero(thresh)
+    pixel_count = thresh.size
 
-                if changed >= sense_cap:
-                    return True
-    return False
+    percent_movement = (0.0 + white_count) / pixel_count
+
+    if args.show_all or args.show_delta:
+        cv2.imshow('Movement delta',thresh)
+        cv2.waitKey(5)
+        cv2.destroyAllWindows()
+
+    return percent_movement >= 0.1
 
 
 
 if __name__ == "__main__":
 
-    if len(sys.argv) >= 2:
-        show_windows=True
+    args = parser.parse_args()
 
 
     last_image=get_image()
     last_time_face_seen= False
     last_ids=[]
     person_timeout_counter= 0
+    first_interval = True
 
     while True:
 
         image = get_image()
         was_motion= check_motion(last_image, image)
 
-        if was_motion:
-            #print( 'motion detected!')
-            ids= fh.find_nbrs(image)
+        if was_motion or first_interval:
+            print( 'motion detected!')
+            ids= fh.find_nbrs(image, show_faces=(args.show_all or args.show_detection), show_cam=(args.show_all or args.show_cam))
+
+            print "ids: {}".format(ids)
 
             if ids:
                 person_timeout_counter = 0
@@ -95,7 +123,7 @@ if __name__ == "__main__":
                 last_time_face_seen=False
 
         else:
-            #print( 'no motion detected')
+            print( 'no motion detected')
 
             if last_time_face_seen:
                 person_timeout_counter +=1
@@ -113,7 +141,10 @@ if __name__ == "__main__":
                     else:
                         last_time_face_seen=False
 
+            else:
+                sleep(0.5)
 
 
+        first_interval = False
         last_image = image
-        sleep(1)
+        sleep(0.5)
