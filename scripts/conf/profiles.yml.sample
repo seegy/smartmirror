@@ -1,0 +1,10 @@
+- name: "Adam"
+  faceId: 1
+  openCVdir: "/path/to/adams/image/dir"
+  tags:
+    - "Berlin"
+- name: "Betti"
+  faceId: 2
+  openCVdir: "/path/to/bettis/image/dir"
+  tags:
+    - "Hamburg"
