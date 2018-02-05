@@ -28,7 +28,6 @@ redis_conn = redis.StrictRedis(**config)
 
 class Face_Helper:
 
-
     def __init__(self):
 
         self.recognizerDir=  Config.get('OpenCV', 'recognizer_dir')
@@ -45,13 +44,18 @@ class Face_Helper:
         # For face recognition we will the the LBPH Face Recognizer
         self.recognizer = cv2.face.LBPHFaceRecognizer_create()
 
-        if os.path.exists(self.recognizerFile):
-            self.set_recognizer(self.recognizerFile)
-
         self.face_max_pixels= int(Config.get('OpenCV', 'target_image_pixel'))
 
-        self.prediction_lower_limit = 90.
-        self.prediction_upper_limit = 100.
+        self.prediction_lower_limit = int(Config.get('OpenCV', 'prediction_lower_limit'))
+        self.prediction_upper_limit = int(Config.get('OpenCV', 'prediction_upper_limit'))
+
+        self.already_trained = False
+
+
+    def print_config(self):
+        print "face_max_pixels: {}".format(self.face_max_pixels)
+        print "prediction_lower_limit: {}".format(self.prediction_lower_limit)
+        print "prediction_upper_limit: {}".format(self.prediction_upper_limit)
 
 
     def really_a_face (self, inner_face, show_windows=False):
@@ -75,26 +79,40 @@ class Face_Helper:
         return np.dot(rgb[...,:3], [0.299, 0.587, 0.114])
 
 
+    def resize_image(self, inner_face, face_max_pixels=0):
 
-    def resize_image(self, inner_face):
+        if face_max_pixels == 0:
+            face_max_pixels = self.face_max_pixels
+
         h= np.size(inner_face, 0)
-        return scipy.misc.imresize(inner_face, ( (0. + self.face_max_pixels) / h ))
+        return scipy.misc.imresize(inner_face, ((0. + self.face_max_pixels) / h))
+
 
     def set_recognizer(self, recognizerFile):
         self.recognizer.read(recognizerFile)
 
+    def load(self):
+
+        if os.path.exists(self.recognizerFile):
+            self.set_recognizer(self.recognizerFile)
+            self.already_trained = True
+
 
     def detect_faces(self, predict_image):
-        return self.face_cascade.detectMultiScale(predict_image,
-                                                  minNeighbors=5,
-                                                  minSize=(self.face_max_pixels / 2, self.face_max_pixels / 2),
-                                                  flags = cv2.CASCADE_SCALE_IMAGE)
+        return self.face_cascade.detectMultiScale(
+                  predict_image,
+                  scaleFactor=1.1,
+                  minNeighbors=5,
+                  minSize=(self.face_max_pixels / 2, self.face_max_pixels / 2),
+                  flags = cv2.CASCADE_SCALE_IMAGE)
 
     def write_unknown_face_to_redis(_, image):
         redis_conn.lpush(ufl, pickle.dumps(image))
         print "Sent unknown picture to redis."
 
-    def find_nbrs(self, new_image, show_faces=False, show_cam=False):
+
+    def find_nbrs(self, new_image, show_faces=False, show_cam=False,
+    send_to_redis=True, silent=False):
         nbrs = Set()
         faces = self.detect_faces(new_image)
 
@@ -106,27 +124,30 @@ class Face_Helper:
             inner_face= new_image[y: y + h, x: x + w]
 
             if show_cam:
-                cv2.rectangle(big_picture, (x, y), (x+w, y+h), (150 + random.randint(0,105), 0, 0), 2)
+                cv2.rectangle(big_picture, (x, y), (x+w, y+h),
+                                        (150 + random.randint(0,105), 0, 0), 2)
 
 
             resized= self.resize_image(inner_face)
-
             nbr_predicted, conf = self.recognizer.predict(resized)
-            print "nbr: {}, conf: {}".format(nbr_predicted, conf)
+
+            if not silent:
+                print "nbr: {}, conf: {}".format(nbr_predicted, conf)
 
             if self.prediction_lower_limit <= conf <= self.prediction_upper_limit:
                 nbrs.add(nbr_predicted)
             else :
-                print 'Found unknown face!'
+                if not silent:
+                    print 'Found unknown face!'
 
-                start_new_thread(self.write_unknown_face_to_redis, (inner_face,))
+                if send_to_redis:
+                    start_new_thread(self.write_unknown_face_to_redis, (inner_face,))
 
                 if show_faces:
-                    cv2.imshow('Unknown face',inner_face)
+                    cv2.imshow('Unknown face',resized)
                     cv2.waitKey(5)
                     sleep(2)
                     cv2.destroyAllWindows()
-
 
         if show_cam:
             cv2.imshow('whole cam',big_picture)
@@ -136,9 +157,8 @@ class Face_Helper:
         return list(nbrs)
 
 
-
-
-    def train_pictures(self, image_paths, nbr, skipCheck=False, show_windows=False, wait_for_nl=False):
+    def train_pictures(self, image_paths, nbr, skipCheck=False,
+                        show_windows=False, wait_for_nl=False):
         # images will contains face images
         images = []
         # labels will contains the label that is assigned to the image
@@ -185,13 +205,16 @@ class Face_Helper:
                         #print "{} {} {} {} {}: Adding faces to traning set for {}...".format(image_path, y, h, x, w, nbr)
 
         print "Add {} samples to id {}.".format(len(labels), nbr)
+
         # return the images list and labels list
-        if os.path.exists(self.recognizerFile):
+        if self.already_trained:
             self.recognizer.update(images, np.array(labels))
         else:
             self.recognizer.train(images, np.array(labels))
+            self.already_trained = True
 
         return images, labels
+
 
     def save(self):
         if not os.path.exists(self.recognizerDir):

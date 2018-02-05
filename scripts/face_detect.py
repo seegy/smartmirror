@@ -22,6 +22,7 @@ parser.add_argument('--show_delta', action="store_true", help='Shows the movemen
 parser.add_argument('--show_detection', action="store_true", help='Shows detected faces.')
 parser.add_argument('--show_cam', action="store_true", help='Shows cam snapshot.')
 parser.add_argument('--show_all', action="store_true", help='Shows all')
+parser.add_argument('--force_detection', action="store_true", help='skips movement checks and force detection every frame')
 
 
 Config = ConfigParser.ConfigParser()
@@ -94,6 +95,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
+    fh.load()
 
     last_image=get_image()
     last_time_face_seen= False
@@ -104,7 +106,7 @@ if __name__ == "__main__":
     while True:
 
         image = get_image()
-        was_motion= check_motion(last_image, image)
+        was_motion= args.force_detection or check_motion(last_image, image)
 
         if was_motion or first_interval:
             print( 'motion detected!')
